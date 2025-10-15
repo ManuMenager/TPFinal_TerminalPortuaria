@@ -1,1 +1,7 @@
-/bin/
+.project
+.classpath
+.settings/
+bin/
+*.class
+.DS_Store
+Thumbs.db
