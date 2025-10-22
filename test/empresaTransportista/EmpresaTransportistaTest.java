@@ -18,16 +18,18 @@ class EmpresaTransportistaTest {
 	@Test
 	void verificarRegistroDeCamionTest() {
 		Camion camion1 = mock(Camion.class);
+		Camion camion2 = mock(Camion.class);
 		
 		//Configuro el comportamiento del mock
 		
 		when(camion1.getPatente()).thenReturn("asd123");
+		when(camion2.getPatente()).thenReturn("zzz555");
 		
 		empT.registrarCamion(camion1);
 		
-		boolean resultado = empT.estaRegistradoElCamionDePatente("asd123"); 
+		boolean resultado = empT.estaRegistradoElCamion(camion1); 
 		//Retorno True si esta registrado
-		boolean resultado1 = empT.estaRegistradoElCamionDePatente("zzz555");
+		boolean resultado1 = empT.estaRegistradoElCamion(camion2);
 		//Retorna False porque no hay ningun camion registrado con esa patente
 		
 		assertTrue(resultado);
