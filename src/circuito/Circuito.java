@@ -15,8 +15,14 @@ public class Circuito {
 	public TerminalPortuaria terminalOrigen() {
 		return tramos.getFirst().getOrigen();
 	}
+	
+	public boolean contieneTerminales(TerminalPortuaria origen, TerminalPortuaria destino) {
+		boolean contieneOrigen = tramos.stream().anyMatch(t -> t.getOrigen().equals(origen));
+		boolean contieneDestino = tramos.stream().anyMatch(t -> t.getDestino().equals(destino));
+		return contieneOrigen && contieneDestino;
+	}
 
-	public int tiempoDesdeHasta(TerminalPortuaria origen, TerminalPortuaria destino){
+	public int tiempoDesdeHasta(TerminalPortuaria origen, TerminalPortuaria destino) throws IllegalArgumentException{
 		if (!contieneTerminales(origen, destino)) {
             throw new IllegalArgumentException("Alguna de las terminales no existe en el circuito");
         }
@@ -32,14 +38,12 @@ public class Circuito {
 		return duracion;
 	}
 
-	public boolean contieneTerminales(TerminalPortuaria origen, TerminalPortuaria destino) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	public double precioFinal() {
-		// TODO Auto-generated method stub
-		return 0;
+		double precioFinal = 0.0;
+		for (Tramo t : tramos) {
+			precioFinal += t.getPrecio();
+		}
+		return precioFinal;
 	}
 
 }

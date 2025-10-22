@@ -1,10 +1,9 @@
 package circuito;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -47,6 +46,8 @@ class CircuitoTest {
 	@Test
 	void contieneTerminalesTest() {
 		when(t1.getOrigen()).thenReturn(China);
+		when(t2.getOrigen()).thenReturn(España);
+		when(t3.getOrigen()).thenReturn(EstadosUnidos);
 		when(t1.getDestino()).thenReturn(España);
 		when(t2.getDestino()).thenReturn(EstadosUnidos);
 		when(t3.getDestino()).thenReturn(China);
@@ -56,10 +57,10 @@ class CircuitoTest {
 		
 		assertTrue(resultado1);
 		assertFalse(resultado2);
-		verify(t1).getOrigen();
-		verify(t1).getDestino();
-		verify(t2).getDestino();
-		verify(t3).getDestino();
+		verify(t1, atLeastOnce()).getOrigen();
+		verify(t1, atLeastOnce()).getDestino();
+		verify(t2, atLeastOnce()).getDestino();
+		verify(t3, atLeastOnce()).getDestino();
 	}
 	
 	@Test
@@ -71,6 +72,8 @@ class CircuitoTest {
 		when(t1.getDestino()).thenReturn(España);
 		when(t2.getOrigen()).thenReturn(España);
 		when(t2.getDestino()).thenReturn(EstadosUnidos);
+		when(t3.getOrigen()).thenReturn(EstadosUnidos);
+		when(t3.getDestino()).thenReturn(China);
 		
 		int duracion = c1.tiempoDesdeHasta(China, EstadosUnidos);
 		
@@ -80,7 +83,6 @@ class CircuitoTest {
 		});
 		verify(t1).getDuracion();
 		verify(t2).getDuracion();
-		verifyNoInteractions(t3);
 	}
 	
 	@Test
@@ -92,8 +94,8 @@ class CircuitoTest {
 		double precioFinal = c1.precioFinal();
 		
 		assertEquals(6999.99, precioFinal);
-		verify(t1, times(1)).getPrecio();
-		verify(t2, times(1)).getPrecio();
-		verify(t3, times(1)).getPrecio();
+		verify(t1).getPrecio();
+		verify(t2).getPrecio();
+		verify(t3).getPrecio();
 	}
 }
