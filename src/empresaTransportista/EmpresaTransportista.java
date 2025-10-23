@@ -12,9 +12,9 @@ public class EmpresaTransportista {
 		camiones.add(camion);
 	}
 
-	public boolean estaRegistradoElCamionDePatente(String patente) {
+	public boolean estaRegistradoElCamion(Camion camion1) {
 		// TODO Auto-generated method stub
-		return camiones.stream().anyMatch(camion -> camion.getPatente() == patente);
+		return camiones.stream().anyMatch(camion -> camion.getPatente() == camion1.getPatente());
 	}
 
 }
