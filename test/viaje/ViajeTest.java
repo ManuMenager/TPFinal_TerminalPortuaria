@@ -6,7 +6,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -32,13 +31,13 @@ class ViajeTest {
 	@BeforeEach
 	void setUp() {
 		spyCircuito = spy(new Circuito());
-		spyTramo1 = spy(new Tramo(Argentina, Brasil, 5, 1500.00));
-		spyTramo2 = spy(new Tramo(Brasil, China, 20, 10960.00));
-		spyTramo3 = spy(new Tramo(China, Argentina, 25, 13260.00));
 		China = mock(TerminalPortuaria.class);
 		Argentina = mock(TerminalPortuaria.class);
 		Brasil = mock(TerminalPortuaria.class);
 		EstadosUnidos = mock(TerminalPortuaria.class);
+		spyTramo1 = spy(new Tramo(Argentina, Brasil, 5, 1500.00));
+		spyTramo2 = spy(new Tramo(Brasil, China, 20, 10960.00));
+		spyTramo3 = spy(new Tramo(China, Argentina, 25, 13260.00));
 		
 		spyCircuito.agregarTramo(spyTramo1);
 		spyCircuito.agregarTramo(spyTramo2);

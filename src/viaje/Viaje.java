@@ -36,8 +36,8 @@ public class Viaje {
 		LocalDateTime fechaActual = this.fechaSalida;
 		TerminalPortuaria terminalActual = circuito.terminalOrigen();
 		for (Tramo tramo : circuito.getTramos()) {
-			fechaActual = fechaActual.plusHours(tramo.getDuracion());
 			nuevoCronograma.put(tramo.getOrigen(), fechaActual);
+			fechaActual = fechaActual.plusHours(tramo.getDuracion());
 			terminalActual = tramo.getDestino();
 		}
 		return nuevoCronograma;
