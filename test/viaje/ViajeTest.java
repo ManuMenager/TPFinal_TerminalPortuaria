@@ -59,7 +59,4 @@ class ViajeTest {
 		verify(spyCircuito).contieneTerminal(Brasil);
 		verify(spyCircuito).contieneTerminal(EstadosUnidos);
 	}
-	
-	
-
 }
