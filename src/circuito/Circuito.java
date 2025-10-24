@@ -6,7 +6,7 @@ import java.util.List;
 import terminalPortuaria.TerminalPortuaria;
 
 public class Circuito {
-	List<Tramo> tramos = new ArrayList<Tramo>();
+	private List<Tramo> tramos = new ArrayList<Tramo>();
 	
 	public void agregarTramo(Tramo t) {
 		tramos.add(t);
@@ -16,15 +16,31 @@ public class Circuito {
 		return tramos.getFirst().getOrigen();
 	}
 	
-	public boolean contieneTerminales(TerminalPortuaria origen, TerminalPortuaria destino) {
-		boolean contieneOrigen = tramos.stream().anyMatch(t -> t.getOrigen().equals(origen));
-		boolean contieneDestino = tramos.stream().anyMatch(t -> t.getDestino().equals(destino));
-		return contieneOrigen && contieneDestino;
+	public boolean recorreDesdeHasta(TerminalPortuaria origen, TerminalPortuaria destino) {
+		int indiceOrigen = -1;
+		for (int i = 0; i < this.tramos.size(); i++) {
+			if (tramos.get(i).getOrigen().equals(origen)) {
+				indiceOrigen = i;
+				break;
+			}
+		}
+		
+		if (indiceOrigen == -1) {
+ 			return false;	// Si no encontró el origen devuelve false.
+		}
+		
+		for (int j = indiceOrigen; j < this.tramos.size(); j++) {
+			if (tramos.get(j).getDestino().equals(destino)) {
+				return true;
+			}
+		}
+		
+		return false; // No se encontró ningún destino igual al destino solicitado luego del origen dado.
 	}
 
 	public int tiempoDesdeHasta(TerminalPortuaria origen, TerminalPortuaria destino) throws IllegalArgumentException{
-		if (!contieneTerminales(origen, destino)) {
-            throw new IllegalArgumentException("Alguna de las terminales no existe en el circuito");
+		if (!recorreDesdeHasta(origen, destino)) {
+            throw new IllegalArgumentException("Alguna de las terminales no existe en el circuito o el circuito no recorre esas terminales en ese orden.");
         }
 		int duracion = 0;
 		boolean sumando = false;
@@ -44,6 +60,14 @@ public class Circuito {
 			precioFinal += t.getPrecio();
 		}
 		return precioFinal;
+	}
+	
+	public boolean contieneTerminal(TerminalPortuaria terminal) {
+		return tramos.stream().anyMatch(t -> t.getOrigen().equals(terminal));
+	}
+	
+	public List<Tramo> getTramos() {
+		return this.tramos;
 	}
 
 }
