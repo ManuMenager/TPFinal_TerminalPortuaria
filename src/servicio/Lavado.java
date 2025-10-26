@@ -1,5 +1,8 @@
 package servicio;
 
-public class Lavado implements Servicio {
-
+public class Lavado extends Servicio {
+	private int precioFijo;
+	public int costoServicio() {
+		
+	}
 }

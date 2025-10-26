@@ -1,5 +1,10 @@
 package servicio;
 
-public class Almacenamiento implements Servicio {
+public class Almacenamiento extends Servicio {
+	private int costoPorDia;
+	public int costoServicio() {
+		
+	}
+
 
 }

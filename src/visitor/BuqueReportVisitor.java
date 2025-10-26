@@ -1,5 +1,9 @@
 package visitor;
 
-public class BuqueReportVisitor implements ReportVisitor {
+import buque.Buque;
+import orden.Orden;
 
+public class BuqueReportVisitor implements ReportVisitor {
+	public void visit(Buque buque) {}
+	public void visit(Orden orden) {}
 }
