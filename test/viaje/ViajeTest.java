@@ -1,7 +1,9 @@
 package viaje;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -51,11 +53,45 @@ class ViajeTest {
 	void proximaFechaHaciatest() {
 		LocalDateTime proximaFecha = viaje.proximaFechaHacia(Brasil);
 		LocalDateTime proximaFecha2 = viaje.proximaFechaHacia(EstadosUnidos);
+		LocalDateTime proximaFecha3 = viaje.proximaFechaHacia(China);
 		
 		assertEquals(LocalDateTime.of(2025, 12, 23, 15, 00), proximaFecha);
 		assertNotEquals(LocalDateTime.of(2025, 12, 23, 15, 00), proximaFecha2);
+		assertEquals(LocalDateTime.of(2025, 12, 23, 15, 00), proximaFecha3);
 		
 		verify(spyCircuito).contieneTerminal(Brasil);
 		verify(spyCircuito).contieneTerminal(EstadosUnidos);
+		verify(spyCircuito).contieneTerminal(China);
+	}
+	
+	@Test
+	void tieneProximaFechaDeLlegadaTest() {
+		boolean resultado = viaje.tieneProximaFechaDeLlegada(LocalDateTime.of(2025, 12, 23, 20, 00));
+		boolean resultado2 = viaje.tieneProximaFechaDeLlegada(LocalDateTime.of(2025, 12, 24, 16, 00));
+		boolean resultado3 = viaje.tieneProximaFechaDeLlegada(LocalDateTime.of(2025, 11, 20, 17, 00));
+		
+		assertTrue(resultado);
+		assertTrue(resultado2);
+		assertFalse(resultado3);
+	}
+	
+	@Test
+	void tieneFechaSalidaTest() {
+		boolean resultado = viaje.tieneFechaSalida(LocalDateTime.of(2025, 12, 23, 15, 00));
+		boolean resultado2 = viaje.tieneFechaSalida(LocalDateTime.of(2025, 12, 23, 20, 00));
+		
+		assertTrue(resultado);
+		assertFalse(resultado2);
+	}
+	
+	@Test
+	void tieneComoPuertoDestinoTest() {
+		boolean resultado = viaje.tieneComoPuertoDestino(Brasil);
+		boolean resultado2 = viaje.tieneComoPuertoDestino(China);
+		boolean resultado3 = viaje.tieneComoPuertoDestino(EstadosUnidos);
+		
+		assertTrue(resultado);
+		assertTrue(resultado2);
+		assertFalse(resultado3);
 	}
 }
