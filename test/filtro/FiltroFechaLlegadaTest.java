@@ -3,6 +3,7 @@ package filtro;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +19,7 @@ class FiltroFechaLlegadaTest {
     @Test
     void testFiltrarUnViajeQueCoincideConFecha() {
         // setUp - Construccion de clases con Mock 
-        LocalDate fechaFiltro = LocalDate.of(2026, 1, 1);
+        LocalDateTime fechaFiltro = LocalDateTime.of(2026, 1, 1, 15, 30);
         Viaje viajeCoincidente = mock(Viaje.class);
         Viaje viajeNoCoincidente = mock(Viaje.class);
         
@@ -43,7 +44,7 @@ class FiltroFechaLlegadaTest {
     @Test
     void testFiltrarListaVacia() {
         // SetUp - Armo el escenario a probar 
-        LocalDate fechaFiltro = LocalDate.of(2026, 1, 1);
+        LocalDateTime fechaFiltro = LocalDateTime.of(2026, 1, 1, 0, 0);
         List<Viaje> viajesVacias = new ArrayList<>();
         FiltroFechaLlegada filtro = new FiltroFechaLlegada(fechaFiltro);
         
@@ -57,7 +58,7 @@ class FiltroFechaLlegadaTest {
     @Test
     void testFiltrarVariosViajesQueCoinciden() {
         // setUp - construccion de viajes con mock 
-        LocalDate fechaFiltro = LocalDate.of(2026, 1, 1);
+        LocalDateTime fechaFiltro = LocalDateTime.of(2026, 1, 1, 10, 00);
         Viaje viaje1 = mock(Viaje.class);
         Viaje viaje2 = mock(Viaje.class);
         Viaje viaje3 = mock(Viaje.class);
@@ -84,7 +85,7 @@ class FiltroFechaLlegadaTest {
     @Test
     void testFiltrarNingunViajeCoincide() {
         // setUp - construccion de viajes con mock 
-        LocalDate fechaFiltro = LocalDate.of(2026, 1, 1);
+        LocalDateTime fechaFiltro = LocalDateTime.of(2026, 1, 1, 3, 00);
         Viaje viaje1 = mock(Viaje.class);
         Viaje viaje2 = mock(Viaje.class);
         

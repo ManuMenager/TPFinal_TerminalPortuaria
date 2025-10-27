@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +18,7 @@ class FiltroFechaSalidaTest {
 	@Test
 	void testConUnViajeQueCoincideFechaSalida() {
 		// setUp - Construccion de clases con Mock 
-        LocalDate fechaFiltro = LocalDate.of(2025, 12, 1);
+        LocalDateTime fechaFiltro = LocalDateTime.of(2025, 12, 1, 9, 00);
         Viaje viajeCoincidente = mock(Viaje.class);
         Viaje viajeNoCoincidente = mock(Viaje.class);
         
@@ -42,7 +43,7 @@ class FiltroFechaSalidaTest {
 	@Test
     void testFiltrarListaVacia() {
         // SetUp - Armo el escenario a probar 
-        LocalDate fechaFiltro = LocalDate.of(2026, 1, 1);
+        LocalDateTime fechaFiltro = LocalDateTime.of(2026, 1, 1, 4, 00);
         List<Viaje> viajesVacias = new ArrayList<>();
         FiltroFechaSalida filtro = new FiltroFechaSalida(fechaFiltro);
         
@@ -56,7 +57,7 @@ class FiltroFechaSalidaTest {
 	@Test
     void testFiltrarVariosViajesQueCoinciden() {
         // setUp - construccion de viajes con mock 
-        LocalDate fechaFiltro = LocalDate.of(2026, 1, 1);
+        LocalDateTime fechaFiltro = LocalDateTime.of(2026, 1, 1, 5,00);
         Viaje viaje1 = mock(Viaje.class);
         Viaje viaje2 = mock(Viaje.class);
         Viaje viaje3 = mock(Viaje.class);
@@ -83,7 +84,7 @@ class FiltroFechaSalidaTest {
 	@Test
     void testFiltrarNingunViajeCoincide() {
         // setUp - construccion de viajes con mock 
-        LocalDate fechaFiltro = LocalDate.of(2026, 1, 1);
+        LocalDateTime fechaFiltro = LocalDateTime.of(2026, 1, 1, 5, 00);
         Viaje viaje1 = mock(Viaje.class);
         Viaje viaje2 = mock(Viaje.class);
         

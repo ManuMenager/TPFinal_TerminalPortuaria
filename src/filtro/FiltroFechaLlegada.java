@@ -1,6 +1,7 @@
 package filtro;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,10 +9,10 @@ import viaje.Viaje;
 
 public class FiltroFechaLlegada implements Filtro {
 	
-	LocalDate fecha;
+	LocalDateTime fecha;
 
-	public FiltroFechaLlegada(LocalDate f1) {
-		this.fecha = f1;
+	public FiltroFechaLlegada(LocalDateTime fechaFiltro) {
+		this.fecha = fechaFiltro;
 	}
 
 	@Override
