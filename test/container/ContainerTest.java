@@ -1,10 +1,7 @@
 package container;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+
 
 import java.time.LocalDateTime;
 
@@ -17,13 +14,15 @@ class ContainerTest {
 	Dry dry;
 	Reefer reefer;
 	Tanque tanque;
+	DryComposite dryComposite;
 	
 	@BeforeEach
 	public void setUp() {
 		container = new Container("RODR1234567", 60 , 300 , 70 , 500 , true);
-		dry = new Dry("MANU1234567", 50 , 200 , 50 , 500 );
-		reefer = new Reefer("FRAN1234567", 30 , 200 , 60 , 500, true,3.0);
+		dry = new Dry("MANU1234567", 50 , 200 , 50 , 200 );
+		reefer = new Reefer("FRAN1234567", 30 , 200 , 60 , 500,false,3.0);
 		tanque = new Tanque("ELIAS123467", 40 , 200 , 60 , 500, true);
+		dryComposite = new DryComposite("COMP1234567", 50,400, 600, 1000 );
 	}
 
 	@Test
@@ -57,6 +56,7 @@ class ContainerTest {
 			assertTrue(dry.isServicioEspecial() == true );
 	
 	}
+	@Test
 	public void verificoQueCuandoSeCreaContainerTanqueTieneTodasSusDimencionesDeclaradas() {
 		assertTrue(tanque.getId() == "ELIAS123467" );
 		assertTrue(tanque.getAncho() == 40 );
@@ -65,12 +65,19 @@ class ContainerTest {
 		assertTrue(tanque.pesoTotal() == 500 );
 		assertTrue(tanque.isServicioEspecial() == true );
 	}
+	@Test
 	public void verificoQueCuandoSeCreaContainerReeferTieneTodasSusDimencionesDeclaradas() {
-		assertTrue(tanque.getId() == "FRAN1234567" );
-		assertTrue(tanque.getAncho() == 30 );
-		assertTrue(tanque.getLargo() == 200 );
-		assertTrue(tanque.getAltura() == 60 );
-		assertTrue(tanque.pesoTotal() == 500 );
-		assertTrue(tanque.isServicioEspecial() == true );
+		assertTrue(reefer.getId() == "FRAN1234567" );
+		assertTrue(reefer.getAncho() == 30 );
+		assertTrue(reefer.getLargo() == 200 );
+		assertTrue(reefer.getAltura() == 60 );
+		assertTrue(reefer.pesoTotal() == 500 );
+		assertTrue(reefer.isServicioEspecial() == false );
+	}
+	@Test
+	public void pesoTotalDeDrys() {
+		dryComposite.add(dry);
+		dryComposite.add(dry);
+		assertEquals(1400.0, dryComposite.pesoTotal());
 	}
 }

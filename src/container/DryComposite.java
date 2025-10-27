@@ -1,9 +1,10 @@
 package container;
 
-import java.util.List;
+import java.util.ArrayList;
+
 
 public class DryComposite extends Dry{
-	private List<Dry> cargas;
+	private ArrayList<Dry> cargas = new ArrayList<Dry>();
 
 	public DryComposite(String id, int ancho, int largo, int altura, int peso) {
 		super(id, ancho, largo, altura, peso);
