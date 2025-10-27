@@ -6,8 +6,5 @@ public class Tanque extends Container {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-    public double pesoTotal() {
-        return getPeso();
-    }
+	
 }

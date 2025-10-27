@@ -6,8 +6,5 @@ public class DryLeaf extends Dry {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-    public double pesoTotal() {
-        return getPeso();
-    }
+
 }

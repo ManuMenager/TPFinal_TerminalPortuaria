@@ -37,7 +37,7 @@ public class Container {
 		return servicioEspecial;
 	}
 	public double pesoTotal() {
-        return peso;
+        return this.getPeso();
     }
 	
 }
