@@ -70,4 +70,17 @@ public class Circuito {
 		return this.tramos;
 	}
 
+	public double precioDesdeHasta(TerminalPortuaria terminalGestionada, TerminalPortuaria puertoDestino) {
+		// Retorna el precio total de recorrido entre origen y destino, en caso de que el circuito tenga
+		// en el recorrido a terminalGestionada y puertoDestino
+		double precio = 0.0;
+		return precio;
+	}
+
+	public int getEscalasDesdeHasta(TerminalPortuaria terminalGestionada, TerminalPortuaria puertoDestino) {
+		// Retorna la cant de terminales intermedias entre origen y destino, en caso de que el circuito
+		// tenga en el recorrido a terminalGestionada y puertoDestino 
+		return 0;
+	}
+
 }
