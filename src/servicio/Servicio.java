@@ -1,18 +1,17 @@
 package servicio;
 
-import java.time.LocalDate;
+import orden.Orden;
 
-public class Servicio {
+public abstract class Servicio {
 	private String nombreServicio;
-	private LocalDate fechaServicio;
+	//private LocalDate fechaServicio; PREGUNTAR PARA QUE ES
 	
-	public double costoServicio() {
-		
+	public Servicio(String nombreServicio) {
+		super();
+		this.nombreServicio = nombreServicio;
 	}
-	public double costoBase() {
-		
-	}
-	public double extraSiCorresponde() {
-		
-	}
+	
+	public abstract double costoServicio(Orden orden);
+
+	
 }
