@@ -71,12 +71,12 @@ public class Circuito {
 			double precio = 0;
 			int indiceTerminalGestionada = indiceDeTerminal(terminalGestionada);
 			
-			for (int i = indiceTerminalGestionada; !tramos.get(i).getOrigen().equals(puertoDestino); i++) {
+			for (int i = indiceTerminalGestionada; i < tramos.size() && !tramos.get(i).getOrigen().equals(puertoDestino); i++) {
 				precio += this.tramos.get(i).getPrecio();
 			}
 			return precio;
 		} else {
-			throw new IllegalArgumentException("Alguna de las terminales no existe en el circuito o el circuito no recorre esas terminales en ese orden.");
+			return -1;
 		}
 	}
 	
@@ -105,7 +105,7 @@ public class Circuito {
 			}
 			return escalas;
 		} else {
-			throw new IllegalArgumentException("Alguna de las terminales no existe en el circuito o el circuito no recorre esas terminales en ese orden.");
+			return -1;
 		}
 	}
 

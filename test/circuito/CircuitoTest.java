@@ -127,23 +127,21 @@ class CircuitoTest {
 		
 		double precioFinal1 = c1.precioDesdeHasta(Argentina, España);
 		double precioFinal2 = c1.precioDesdeHasta(Brasil, EstadosUnidos);
+		double precioFinal3 = c1.precioDesdeHasta(España, Brasil);
 		
 		assertEquals(2500.0, precioFinal1);
 		assertEquals(3200.0, precioFinal2);
-		assertThrows(IllegalArgumentException.class, () -> {
-			c1.precioDesdeHasta(España, Brasil);
-		});
+		assertEquals(-1, precioFinal3);
 	}
 	
 	@Test
 	void escalasDesdeHastaTest() {
 		int e1 = c1.escalasDesdeHasta(Argentina, Brasil);
 		int e2 = c1.escalasDesdeHasta(Argentina, España);
+		int e3 = c1.escalasDesdeHasta(España, Brasil);
 		
 		assertEquals(0, e1);
 		assertEquals(1, e2);
-		assertThrows(IllegalArgumentException.class, () -> {
-			c1.precioDesdeHasta(España, Brasil);
-		});
+		assertEquals(-1, e3);
 	}
 }
