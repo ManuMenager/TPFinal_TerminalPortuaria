@@ -38,6 +38,15 @@ class CircuitoTest {
 		c1.agregarTramo(t1);
 		c1.agregarTramo(t2);
 		c1.agregarTramo(t3);
+		
+		when(t1.getOrigen()).thenReturn(Argentina);
+		when(t2.getOrigen()).thenReturn(Brasil);
+		when(t3.getOrigen()).thenReturn(España);
+		when(t4.getOrigen()).thenReturn(EstadosUnidos);
+		when(t1.getDestino()).thenReturn(Brasil);
+		when(t2.getDestino()).thenReturn(España);
+		when(t3.getDestino()).thenReturn(EstadosUnidos);
+		when(t4.getDestino()).thenReturn(Argentina);
 	}
 	
 	@Test
@@ -49,15 +58,6 @@ class CircuitoTest {
 	
 	@Test
 	void recorreDesdeHastaTest() {
-		when(t1.getOrigen()).thenReturn(Argentina);
-		when(t2.getOrigen()).thenReturn(Brasil);
-		when(t3.getOrigen()).thenReturn(España);
-		when(t4.getOrigen()).thenReturn(EstadosUnidos);
-		when(t1.getDestino()).thenReturn(Brasil);
-		when(t2.getDestino()).thenReturn(España);
-		when(t3.getDestino()).thenReturn(EstadosUnidos);
-		when(t4.getDestino()).thenReturn(Argentina);
-		
 		boolean resultado1 = c1.recorreDesdeHasta(Argentina, España);
 		boolean resultado2 = c1.recorreDesdeHasta(Brasil, EstadosUnidos);
 		boolean resultado3 = c1.recorreDesdeHasta(EstadosUnidos, España);
@@ -109,5 +109,41 @@ class CircuitoTest {
 		verify(t1).getPrecio();
 		verify(t2).getPrecio();
 		verify(t3).getPrecio();
+	}
+	
+	@Test
+	void indiceDeTerminalTest() {
+		assertEquals(0, c1.indiceDeTerminal(Argentina));
+		assertEquals(1, c1.indiceDeTerminal(Brasil));
+		assertEquals(2, c1.indiceDeTerminal(España));
+	}
+	
+	@Test
+	void precioDesdeHastaTest() {
+		c1.agregarTramo(t4);
+		when(t1.getPrecio()).thenReturn(1000.0);
+		when(t2.getPrecio()).thenReturn(1500.0);
+		when(t3.getPrecio()).thenReturn(1700.0);
+		
+		double precioFinal1 = c1.precioDesdeHasta(Argentina, España);
+		double precioFinal2 = c1.precioDesdeHasta(Brasil, EstadosUnidos);
+		
+		assertEquals(2500.0, precioFinal1);
+		assertEquals(3200.0, precioFinal2);
+		assertThrows(IllegalArgumentException.class, () -> {
+			c1.precioDesdeHasta(España, Brasil);
+		});
+	}
+	
+	@Test
+	void escalasDesdeHastaTest() {
+		int e1 = c1.escalasDesdeHasta(Argentina, Brasil);
+		int e2 = c1.escalasDesdeHasta(Argentina, España);
+		
+		assertEquals(0, e1);
+		assertEquals(1, e2);
+		assertThrows(IllegalArgumentException.class, () -> {
+			c1.precioDesdeHasta(España, Brasil);
+		});
 	}
 }

@@ -17,13 +17,7 @@ public class Circuito {
 	}
 	
 	public boolean recorreDesdeHasta(TerminalPortuaria origen, TerminalPortuaria destino) {
-		int indiceOrigen = -1;
-		for (int i = 0; i < this.tramos.size(); i++) {
-			if (tramos.get(i).getOrigen().equals(origen)) {
-				indiceOrigen = i;
-				break;
-			}
-		}
+		int indiceOrigen = indiceDeTerminal(origen);
 		
 		if (indiceOrigen == -1) {
  			return false;	// Si no encontró el origen devuelve false.
@@ -73,14 +67,46 @@ public class Circuito {
 	public double precioDesdeHasta(TerminalPortuaria terminalGestionada, TerminalPortuaria puertoDestino) {
 		// Retorna el precio total de recorrido entre origen y destino, en caso de que el circuito tenga
 		// en el recorrido a terminalGestionada y puertoDestino
-		double precio = 0.0;
-		return precio;
+		if (recorreDesdeHasta(terminalGestionada, puertoDestino)) {
+			double precio = 0;
+			int indiceTerminalGestionada = indiceDeTerminal(terminalGestionada);
+			
+			for (int i = indiceTerminalGestionada; !tramos.get(i).getOrigen().equals(puertoDestino); i++) {
+				precio += this.tramos.get(i).getPrecio();
+			}
+			return precio;
+		} else {
+			throw new IllegalArgumentException("Alguna de las terminales no existe en el circuito o el circuito no recorre esas terminales en ese orden.");
+		}
+	}
+	
+	protected int indiceDeTerminal(TerminalPortuaria t) {
+		if (contieneTerminal(t)) {
+			int indice = -1;
+			for (int i = 0; i < this.tramos.size(); i++) {
+				if (tramos.get(i).getOrigen().equals(t)) {
+					indice = i;
+					break;
+				}
+			}
+			return indice;
+		} else {
+			return -1;
+		}
 	}
 
-	public int getEscalasDesdeHasta(TerminalPortuaria terminalGestionada, TerminalPortuaria puertoDestino) {
-		// Retorna la cant de terminales intermedias entre origen y destino, en caso de que el circuito
-		// tenga en el recorrido a terminalGestionada y puertoDestino 
-		return 0;
+	public int escalasDesdeHasta(TerminalPortuaria terminalGestionada, TerminalPortuaria puertoDestino) {
+		if (recorreDesdeHasta(terminalGestionada, puertoDestino)) {
+			int escalas = 0;
+			int indiceTerminalGestionada = indiceDeTerminal(terminalGestionada);
+			
+			for (int i = indiceTerminalGestionada; !tramos.get(i).getDestino().equals(puertoDestino); i++) {
+				escalas++;
+			}
+			return escalas;
+		} else {
+			throw new IllegalArgumentException("Alguna de las terminales no existe en el circuito o el circuito no recorre esas terminales en ese orden.");
+		}
 	}
 
 }
