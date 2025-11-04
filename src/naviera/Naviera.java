@@ -45,6 +45,7 @@ public class Naviera {
 		return circuitos.stream().anyMatch(v -> v.recorreDesdeHasta(origen, destino));
 	}
 	
+	
 	public List<Integer> escalasDesdeHasta(TerminalPortuaria origen, TerminalPortuaria destino) {
 		if (recorreDesdeHasta(origen, destino)) {
 			return circuitos.stream()
@@ -65,5 +66,20 @@ public class Naviera {
 		} else {
 			throw new IllegalArgumentException("Alguna de las terminales no existe en el circuito o el circuito no recorre esas terminales en ese orden.");
 		}
+	}
+
+	public Circuito getCircuitoMenorPrecioDesdeHasta(TerminalPortuaria terminalGestionada,
+			TerminalPortuaria puertoDestino) {
+		//Devuelve el circuito que va desde origen hasta destino con menor precio de recorrido.
+		return null;
+	}
+
+	public Circuito getCircuitoMenorTiempoDesdeHasta(TerminalPortuaria terminalGestionada,
+			TerminalPortuaria puertoDestino) {
+		// Devuelve el circuito que va desde origen hasta destino con menor tiempo de recorrido.
+		return null;
+	}
+	public Circuito getCircuitoMenorEscalasDesdeHasta(TerminalPortuaria origen, TerminalPortuaria destino) {
+		return null; //Devuelve el circuito que va desde origen hasta destino con menor puertos intermedios 
 	}
 }
