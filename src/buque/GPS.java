@@ -1,5 +1,8 @@
 package buque;
 
-public class GPS {
+import java.awt.Point;
 
+
+public interface GPS {
+	public Point enviarPosicion();
 }

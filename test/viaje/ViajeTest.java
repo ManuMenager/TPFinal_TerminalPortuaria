@@ -17,7 +17,6 @@ import buque.Buque;
 import circuito.Circuito;
 import circuito.Tramo;
 import terminalPortuaria.TerminalPortuaria;
-import viaje.Viaje;
 
 class ViajeTest {
 	Circuito spyCircuito;
