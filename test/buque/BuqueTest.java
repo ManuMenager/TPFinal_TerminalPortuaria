@@ -12,8 +12,11 @@ import org.junit.jupiter.api.Test;
 import container.Container;
 
 import java.awt.Point;
+import java.util.List;
+
 import terminalPortuaria.TerminalPortuaria;
 import viaje.Viaje;
+import visitor.ReportVisitor;
 
 public class BuqueTest {
     Buque buque;
@@ -21,19 +24,24 @@ public class BuqueTest {
     TerminalPortuaria terminalGestionada;
     Viaje viaje;
     Container container;
-    Inbound inbound;
-
+    ReportVisitor visitor;
+    
     @BeforeEach
     public void setUp() {
         terminalGestionada = mock(TerminalPortuaria.class);
         gps = mock(GPS.class);
         viaje = mock(Viaje.class); 
         container = mock(Container.class);
-        inbound = mock(Inbound.class);
+        visitor = mock(ReportVisitor.class);
 
         buque = new Buque("El Perla", terminalGestionada, gps, viaje);
         
         when(terminalGestionada.getPosicion()).thenReturn(new Point(0, 0));
+        when(gps.enviarPosicion()).thenReturn(new Point(0, 0));
+        when(gps.hayProblemasClimaticos()).thenReturn(false);
+        
+        buque.agregarContainer(container);
+        buque.removerContainer(container);
     }
 
     @Test
@@ -41,6 +49,11 @@ public class BuqueTest {
         when(gps.enviarPosicion()).thenReturn(new Point(60, 0));
         
         buque.evaluarPosicion();
+        
+        // No hacen nada porque no está en la terminal
+        buque.iniciarTrabajos();
+        buque.finalizarTrabajos();
+        buque.depart();
         
         assertTrue(buque.puedeRegistrar());
         assertFalse(buque.puedePagarServicios());
@@ -51,15 +64,13 @@ public class BuqueTest {
     	when(gps.enviarPosicion()).thenReturn(new Point(40, 0));
     	
         buque.evaluarPosicion();
-
+        
         assertFalse(buque.puedeRegistrar());
         assertFalse(buque.puedePagarServicios());
     }
 
     @Test
     public void buqueArribaEnTerminal() {
-        when(gps.enviarPosicion()).thenReturn(new Point(0, 0));
-        
         buque.evaluarPosicion();
         buque.evaluarPosicion();
         
@@ -67,10 +78,10 @@ public class BuqueTest {
         assertFalse(buque.puedeRegistrar());
         assertFalse(buque.puedePagarServicios());
     }
-    
+
     @Test
     public void buqueNoArribaPorProblemasClimaticosTest() {
-    	when(gps.enviarPosicion()).thenReturn(new Point(0, 0));
+    	when(gps.hayProblemasClimaticos()).thenReturn(true);
     	
     	buque.evaluarPosicion();
     	buque.evaluarPosicion();
@@ -79,9 +90,12 @@ public class BuqueTest {
         assertTrue(buque.puedeRegistrar());
         assertFalse(buque.puedePagarServicios());
     }
-    
+
     @Test
-    public void buqueRealizaTrabajosTest() {
+    public void buqueRealizaTrabajosTest() {	
+    	buque.evaluarPosicion();
+        buque.evaluarPosicion();
+        
         buque.iniciarTrabajos();
         
         assertFalse(buque.puedeRegistrar());
@@ -89,7 +103,15 @@ public class BuqueTest {
     }
     
     @Test
-    public void buqueTerminaTrabajosTest() {
+    public void buqueTerminaTrabajosTest() {   	
+    	buque.evaluarPosicion();
+        buque.evaluarPosicion();
+        
+        buque.iniciarTrabajos();
+        
+        // No hace nada porque ya está en la terminal.
+        buque.evaluarPosicion();
+        
         buque.finalizarTrabajos();
 
         verify(terminalGestionada).finalizarTrabajos(buque);
@@ -99,8 +121,14 @@ public class BuqueTest {
     
     @Test
     public void buqueSeRetiraDeTerminalTest() {
-    	when(gps.enviarPosicion()).thenReturn(new Point(2, 0));
+    	buque.evaluarPosicion();
+        buque.evaluarPosicion();
+        
+        buque.iniciarTrabajos();
+        buque.finalizarTrabajos();
     	
+        when(gps.enviarPosicion()).thenReturn(new Point(2, 0));
+        
         buque.depart();
         
         assertTrue(buque.puedePagarServicios());
@@ -111,5 +139,17 @@ public class BuqueTest {
         verify(terminalGestionada).notificarShippers();
         assertTrue(buque.puedeRegistrar());
         assertFalse(buque.puedePagarServicios());
+    }
+    
+    @Test
+    public void buqueDatosVisitorTest() {
+    	buque.agregarContainer(container);
+    	buque.accept(visitor);
+    	
+    	verify(visitor).visit(buque);
+    	assertEquals("El Perla", buque.getNombre());
+    	assertEquals(List.of(container), buque.getContainers());
+    	assertEquals(viaje, buque.getViaje());
+    	assertEquals(3, buque.getContenedoresOperados());
     }
 }
