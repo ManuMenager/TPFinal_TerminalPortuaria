@@ -13,5 +13,4 @@ public class Almacenamiento extends Servicio {
 		if(orden.getViaje().fechaSalidaTerminalGestionada() != localDate now);
 	}
 
-
 }

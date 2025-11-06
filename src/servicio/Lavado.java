@@ -35,6 +35,5 @@ public class Lavado extends Servicio {
 	
 	public void setPrecioNoSuperaVolumen(int precioNoSuperaVolumen) {
 		this.precioNoSuperaVolumen = precioNoSuperaVolumen;
-	}
-	
+	}	
 }

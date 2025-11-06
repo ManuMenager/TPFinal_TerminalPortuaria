@@ -26,5 +26,4 @@ public class Electricidad extends Servicio {
 	public void setReefer(Reefer reefer) {
 		this.reefer = reefer;
 	}
-	
 }
