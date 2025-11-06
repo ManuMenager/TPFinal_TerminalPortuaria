@@ -13,13 +13,13 @@ import visitor.ReportVisitor;
 public class Orden {
 	private LocalDate turno;
 	private Camion camionAsignado;
-//	private ArrayList <Servicio> servicios = new ArrayList<Servicio>();
+	private ArrayList <Servicio> servicios = new ArrayList<Servicio>();
 	private Viaje viaje;
 	
 	public Chofer choferAsignado{
 		return camionAsignado.getConductor();
 	}
-	public void facturarServicios(List<Servicio> servicios,viaje) {
+	public void facturarServicios() {
 		
 	}
 	public void accept(ReportVisitor visitor) {
@@ -28,7 +28,24 @@ public class Orden {
 	public double montoTotal() {
 		
 	}
+	/////////////////////////////////////////////////////
 	public double montoTotalServicios() {
-		
+	
+			return this.servicios.stream().mapToDouble( s -> s.costoServicio(this)  ).sum();
+		}
+	///////////////////////////////////////////////////
+	public Viaje getViaje() {
+		return viaje;
+	}
+	public void setViaje(Viaje viaje) {
+		this.viaje = viaje;
+	}
+	////////////////////////////////////////////////////
+	public ArrayList<Servicio> getServicios() {
+		return servicios;
+	}
+	public void setServicios(ArrayList<Servicio> servicios) {
+		this.servicios = servicios;
 	}
 }
+
