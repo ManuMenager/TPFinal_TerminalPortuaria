@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +30,7 @@ class ServicioTest {
 		@BeforeEach
 		void setUp() throws Exception {
 			servElectrico = new Electricidad("Electricidad", 20.0);
-			servAlmacenamiento = new Almacenamiento("Electricidad", 10);
+			servAlmacenamiento = new Almacenamiento("Almacenamiento", 50);
 			servLavado = new Lavado("Lavado",10,50,80);
 			servPesado = new Pesado("Pesado", 20);
 			reefer1 = new Reefer("Reefer", 50,60,200, 50, false,20);
@@ -82,5 +83,13 @@ class ServicioTest {
 		}
 		
 		@Test
-		void servicioDeAlmacenamientoExcedenteTest() {}//COMPLETAR
+		void servicioDeAlmacenamientoExcedenteTest() {
+			assertEquals(50, servAlmacenamiento.getCostoPorDia());
+			servAlmacenamiento.setCostoPorDia(100);
+			assertEquals(100, servAlmacenamiento.getCostoPorDia());
+			
+			LocalDate llegadaContainer = LocalDate.of(2025, 11, 2);
+			when(ordenNro1.getViaje().fechaLlegadaTerminalGestionada()).thenReturn(llegadaContainer);
+			assertEquals(LocalDate.now(), servAlmacenamiento.costoServicio(ordenNro1));
+		}
 }
