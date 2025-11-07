@@ -20,15 +20,18 @@ public class Buque implements Visitable {
 	private Point posicion;
 	private int contenedoresOperados = 0;
 
-	public Buque(String nombre, TerminalPortuaria terminalGestionada, GPS gps, Viaje viaje) {
+	public Buque(String nombre, TerminalPortuaria terminalGestionada, GPS gps) {
 		this.nombre = nombre;
 		this.terminalGestionada = terminalGestionada;
 		this.gps = gps;
-		this.viaje = viaje;
 	}
 	
 	protected void setEstado(EstadoBuque e) {
 		this.estado = e;
+	}
+	
+	public void setViaje(Viaje v) {
+		this.viaje = v;
 	}
 	
 	public void evaluarPosicion() {

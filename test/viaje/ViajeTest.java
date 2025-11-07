@@ -7,18 +7,23 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import buque.Buque;
+import buque.GPS;
 import circuito.Circuito;
 import circuito.Tramo;
 import terminalPortuaria.TerminalPortuaria;
 
 public class ViajeTest {
 	Circuito spyCircuito;
+	Buque buque;
+	GPS gps;
 	Viaje viaje; 
 	Tramo spyTramo1;
 	Tramo spyTramo2;
@@ -35,6 +40,8 @@ public class ViajeTest {
 		Argentina = mock(TerminalPortuaria.class);
 		Brasil = mock(TerminalPortuaria.class);
 		EstadosUnidos = mock(TerminalPortuaria.class);
+		gps = mock(GPS.class);
+		buque = new Buque("El Perla", Argentina, gps);
 		
 		spyTramo1 = spy(new Tramo(Argentina, Brasil, 5, 1500.00));
 		spyTramo2 = spy(new Tramo(Brasil, China, 20, 10960.00));
@@ -44,7 +51,7 @@ public class ViajeTest {
 		spyCircuito.agregarTramo(spyTramo2);
 		spyCircuito.agregarTramo(spyTramo3);
 		
-		viaje = new Viaje(spyCircuito, LocalDateTime.of(2025, 12, 23, 15, 00), Argentina); // 23/12/2025 a las 15hs.
+		viaje = new Viaje(buque, spyCircuito, LocalDateTime.of(2025, 12, 23, 15, 00), Argentina); // 23/12/2025 a las 15hs.
 	}
 	
 	@Test
@@ -98,17 +105,18 @@ public class ViajeTest {
 		LocalDateTime fechaOrigen = viaje.fechaLlegadaTerminalGestionada();
 		assertEquals(LocalDateTime.of(2025, 12, 23, 15, 00), fechaOrigen);
 
-		Viaje viaje2 = new Viaje(spyCircuito, LocalDateTime.of(2025, 12, 23, 15, 00), Brasil);
+		Viaje viaje2 = new Viaje(buque, spyCircuito, LocalDateTime.of(2025, 12, 23, 15, 00), Brasil);
 		LocalDateTime fechaDestino = viaje2.fechaLlegadaTerminalGestionada();
 		
+		assertEquals(buque, viaje2.getBuque());
 		assertEquals(LocalDateTime.of(2025, 12, 23, 20, 00), fechaDestino); 
 	}
 	
 	@Test
 	public void precioFinalTest() {
-		double precioEsperado = 25720.00;
+		when(spyCircuito.precioFinal()).thenReturn(25720.00);
 		
-		assertEquals(precioEsperado, viaje.precioFinal(), 0.01); 
+		assertEquals(25720.00, viaje.precioFinal(), 0.01); 
 		
 		verify(spyCircuito).precioFinal();
 	}

@@ -34,12 +34,13 @@ public class BuqueTest {
         container = mock(Container.class);
         visitor = mock(ReportVisitor.class);
 
-        buque = new Buque("El Perla", terminalGestionada, gps, viaje);
+        buque = new Buque("El Perla", terminalGestionada, gps);
         
         when(terminalGestionada.getPosicion()).thenReturn(new Point(0, 0));
         when(gps.enviarPosicion()).thenReturn(new Point(0, 0));
         when(gps.hayProblemasClimaticos()).thenReturn(false);
         
+        buque.setViaje(viaje);
         buque.agregarContainer(container);
         buque.removerContainer(container);
     }

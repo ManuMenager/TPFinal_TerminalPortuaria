@@ -7,17 +7,20 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import buque.Buque;
 import circuito.Circuito;
 import circuito.Tramo;
 
 public class Viaje {
+	private Buque buque;
 	private Circuito circuito;
 	private LocalDateTime fechaSalida;
 	private TerminalPortuaria terminalGestionada;
 	private Map<TerminalPortuaria, LocalDateTime> cronograma = new LinkedHashMap<TerminalPortuaria, LocalDateTime>();;
 	
 	
-	public Viaje(Circuito circuito, LocalDateTime fechaSalida, TerminalPortuaria terminalGestionada) {
+	public Viaje(Buque buque, Circuito circuito, LocalDateTime fechaSalida, TerminalPortuaria terminalGestionada) {
+		this.buque = buque;
 		this.circuito = circuito;
 		this.fechaSalida = fechaSalida;
 		this.terminalGestionada = terminalGestionada;
@@ -36,6 +39,10 @@ public class Viaje {
 			fechaActual = fechaActual.plusHours(tramo.getDuracion());
 		}
 		return nuevoCronograma;
+	}
+	
+	public Buque getBuque() {
+		return this.buque;
 	}
 	
 	public LocalDateTime proximaFechaHacia(TerminalPortuaria terminal) {

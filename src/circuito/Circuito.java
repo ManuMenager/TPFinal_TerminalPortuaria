@@ -100,9 +100,12 @@ public class Circuito {
 			int escalas = 0;
 			int indiceTerminalGestionada = indiceDeTerminal(terminalGestionada);
 			
-			for (int i = indiceTerminalGestionada; !tramos.get(i).getDestino().equals(puertoDestino); i++) {
-				escalas++;
-			}
+			for (int i = indiceTerminalGestionada; i < tramos.size(); i++) {
+	            if (tramos.get(i).getDestino().equals(puertoDestino)) {
+	                break;
+	            }
+	            escalas++;
+	        }
 			return escalas;
 		} else {
 			return -1;
