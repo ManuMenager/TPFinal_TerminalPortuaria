@@ -7,20 +7,17 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import buque.Buque;
 import circuito.Circuito;
 import circuito.Tramo;
 
 public class Viaje {
-	private Buque buque;
 	private Circuito circuito;
 	private LocalDateTime fechaSalida;
 	private TerminalPortuaria terminalGestionada;
 	private Map<TerminalPortuaria, LocalDateTime> cronograma = new LinkedHashMap<TerminalPortuaria, LocalDateTime>();;
 	
 	
-	public Viaje(Buque buque, Circuito circuito, LocalDateTime fechaSalida, TerminalPortuaria terminalGestionada) {
-		this.buque = buque;
+	public Viaje(Circuito circuito, LocalDateTime fechaSalida, TerminalPortuaria terminalGestionada) {
 		this.circuito = circuito;
 		this.fechaSalida = fechaSalida;
 		this.terminalGestionada = terminalGestionada;
@@ -34,11 +31,9 @@ public class Viaje {
 	private Map<TerminalPortuaria, LocalDateTime> crearCronograma(Circuito circuito) {
 		Map<TerminalPortuaria, LocalDateTime> nuevoCronograma = new LinkedHashMap<>();
 		LocalDateTime fechaActual = this.fechaSalida;
-		TerminalPortuaria terminalActual = circuito.terminalOrigen();
 		for (Tramo tramo : circuito.getTramos()) {
 			nuevoCronograma.put(tramo.getOrigen(), fechaActual);
 			fechaActual = fechaActual.plusHours(tramo.getDuracion());
-			terminalActual = tramo.getDestino();
 		}
 		return nuevoCronograma;
 	}
@@ -68,14 +63,23 @@ public class Viaje {
 
 	// Retorna verdadero si el cronograma tiene a la Terminal Gestionada con la fechaDeSalida f.
 	public boolean tieneFechaSalida(LocalDateTime f) {
-		return fechaSalidaTerminalGestionada().equals(f);
+		return fechaSalidaTerminalGestionada().isEqual(f);
 	}
 	
 	// Retorna verdadero si en el cronograma tiene a puertoDestino como proximos arrivos.
-	public boolean tieneComoPuertoDestino(TerminalPortuaria puertoDestino) {
+	public boolean tienePuertoDestino(TerminalPortuaria puertoDestino) {
 		if (this.circuito.contieneTerminal(puertoDestino)) {
 			return LocalDateTime.now().isBefore(this.cronograma.get(puertoDestino));
 		}
 		return false;
+	}
+	
+	// Si la terminalGestionada es el origen devuelve la fechaSalida en caso contrario devuelve la fecha de llegada.
+	public LocalDateTime fechaLlegadaTerminalGestionada() {
+		return cronograma.get(terminalGestionada);
+	}
+	
+	public double precioFinal() {
+		return this.circuito.precioFinal();
 	}
 }
