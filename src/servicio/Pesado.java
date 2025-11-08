@@ -1,12 +1,14 @@
 package servicio;
 
+import java.time.LocalDate;
+
 import orden.Orden;
 
 public class Pesado extends Servicio {
 	private int costoPesaje;
 	
-	public Pesado(String nombreServicio, int costoPesaje) {
-		super(nombreServicio);
+	public Pesado(String nombreServicio, LocalDate fechaServicio, int costoPesaje) {
+		super(nombreServicio,fechaServicio);
 		this.costoPesaje = costoPesaje;
 	}
 	

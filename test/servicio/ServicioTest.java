@@ -29,10 +29,10 @@ class ServicioTest {
 		Reefer reefer1;
 		@BeforeEach
 		void setUp() throws Exception {
-			servElectrico = new Electricidad("Electricidad", 20.0);
-			servAlmacenamiento = new Almacenamiento("Almacenamiento", 50);
-			servLavado = new Lavado("Lavado",10,50,80);
-			servPesado = new Pesado("Pesado", 20);
+			servElectrico = new Electricidad("Electricidad",LocalDate.now(), 20.0);
+			servAlmacenamiento = new Almacenamiento("Almacenamiento",LocalDate.now(), 50);
+			servLavado = new Lavado("Lavado",LocalDate.now(),10,50,80);
+			servPesado = new Pesado("Pesado",LocalDate.now(), 20);
 			reefer1 = new Reefer("Reefer", 50,60,200, 50, false,20);
 			container1 = mock(Container.class);
 			ordenNro1 = mock(Orden.class);

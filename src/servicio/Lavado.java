@@ -1,5 +1,7 @@
 package servicio;
 
+import java.time.LocalDate;
+
 import orden.Orden;
 
 public class Lavado extends Servicio {
@@ -22,8 +24,8 @@ public class Lavado extends Servicio {
 		this.precioFijo = precioFijo;
 	}
 
-	public Lavado(String nombreServicio, int precioFijo, int precioSuperaVolumen, int precioNoSuperaVolumen) {
-		super(nombreServicio);
+	public Lavado(String nombreServicio, LocalDate fechaServicio, int precioFijo, int precioSuperaVolumen, int precioNoSuperaVolumen) {
+		super(nombreServicio, fechaServicio);
 		this.precioFijo = precioFijo;
 		this.precioSuperaVolumen = precioSuperaVolumen;
 		this.precioNoSuperaVolumen = precioNoSuperaVolumen;

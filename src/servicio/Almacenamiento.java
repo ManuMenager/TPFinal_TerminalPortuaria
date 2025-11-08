@@ -1,21 +1,26 @@
-package servicio;import java.time.LocalDate;
+package servicio;
+import java.time.LocalDateTime;
 import java.time.Period;
+
+import java.time.Duration;
+import java.time.LocalDate;
 
 import orden.Orden;
 
 public class Almacenamiento extends Servicio {
 	private int costoPorDia;
 	
-	public Almacenamiento(String nombreServicio, int costoPorDia) {
-		super(nombreServicio);
+	public Almacenamiento(String nombreServicio, LocalDate fechaServicio, int costoPorDia) {
+		super(nombreServicio,fechaServicio);
 		this.costoPorDia = costoPorDia;
 	}
 
 	@Override 
 	public double costoServicio(Orden orden) {
-		Period periodo = Period.between(orden.getViaje().fechaLlegadaTerminalGestionada(), LocalDate.now());
-        int dias = periodo.getDays();
-        return dias * costoPorDia;
+
+		long dias = Duration.between(orden.getViaje().fechaLlegadaTerminalGestionada(), LocalDateTime.now()).toDays();
+		return dias * costoPorDia;
+
 	}
 
 	public int getCostoPorDia() {

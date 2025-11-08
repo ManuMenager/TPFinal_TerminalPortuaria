@@ -1,5 +1,7 @@
 package servicio;
 
+import java.time.LocalDate;
+
 import container.Reefer;
 import orden.Orden;
 
@@ -8,8 +10,8 @@ public class Electricidad extends Servicio {
 	private Reefer reefer;
 	
 	
-	public Electricidad(String nombreServicio, double costoKW) {
-		super(nombreServicio);
+	public Electricidad(String nombreServicio, LocalDate fechaServicio, double costoKW) {
+		super(nombreServicio,fechaServicio);
 		this.costoKW = costoKW;
 		
 	}
