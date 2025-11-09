@@ -23,7 +23,7 @@ public class Factura {
             ConceptoServicio concepto = new ConceptoServicio(
                 servicio.getNombreServicio(),
                 servicio.getFechaServicio(),
-                servicio.costoServicio()
+                servicio.costoServicio(orden)
             );
             this.conceptos.add(concepto);
         }
@@ -41,13 +41,13 @@ public class Factura {
             this.conceptos.add(new ConceptoServicio(
                 "Costo total del viaje",
                 LocalDate.now(),
-                viaje.getMontoTotal()
+                viaje.precioFinal()
             ));
         }
 
         // Total general
         double total = orden.montoTotalServicios()
-                      + (viaje != null ? viaje.getMontoTotal() : 0);
+                      + (viaje != null ? viaje.precioFinal() : 0);
 
         this.conceptos.add(new ConceptoServicio(
             "TOTAL A PAGAR",

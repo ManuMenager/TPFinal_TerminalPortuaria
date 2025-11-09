@@ -2,17 +2,38 @@ package servicio;
 
 import java.time.LocalDate;
 
-public class Servicio {
+import orden.Orden;
+
+public abstract class Servicio {
 	private String nombreServicio;
-	private LocalDate fechaServicio;
+	private LocalDate fechaServicio;  
 	
-	public double costoServicio() {
-		
+	public Servicio(String nombreServicio, LocalDate fechaServicio) {
+		super();
+		this.nombreServicio = nombreServicio;
+		this.fechaServicio = fechaServicio;
 	}
-	public double costoBase() {
-		
+
+
+	
+	public abstract double costoServicio(Orden orden);
+
+	public String getNombreServicio() {
+		return nombreServicio;
 	}
-	public double extraSiCorresponde() {
-		
+
+	public void setNombreServicio(String nombreServicio) {
+		this.nombreServicio = nombreServicio;
 	}
+
+	public LocalDate getFechaServicio() {
+		return fechaServicio;
+	}
+
+	public void setFechaServicio(LocalDate fechaServicio) {
+		this.fechaServicio = fechaServicio;
+	}
+
+	
+
 }

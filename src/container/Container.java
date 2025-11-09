@@ -39,5 +39,8 @@ public class Container {
 	public double pesoTotal() {
         return this.getPeso();
     }
-	
+	public int volumen()
+	{
+		return this.ancho * this.largo * this.altura;
+	}
 }

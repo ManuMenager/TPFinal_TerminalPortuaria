@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import container.Container;
 import empresaTransportista.Camion;
 import empresaTransportista.Chofer;
 import servicio.Servicio;
@@ -15,12 +16,19 @@ public class Orden {
 	private Camion camionAsignado;
 	private ArrayList <Servicio> servicios = new ArrayList<Servicio>();
 	private Viaje viaje;
+	private Container container;
 	
-	public Chofer choferAsignado{
+	/*public Chofer choferAsignado{
 		return camionAsignado.getConductor();
-	}
+	}*/
 	public void facturarServicios() {
 		
+	}
+	public Container getContainer() {
+		return container;
+	}
+	public void setContainer(Container container) {
+		this.container = container;
 	}
 	public void accept(ReportVisitor visitor) {
 		visitor.visitOrden(this);
