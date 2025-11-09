@@ -16,19 +16,27 @@ import viaje.Viaje;
 
 public class Naviera {
 	private List<Circuito> circuitos = new ArrayList<>();
-	private List<Buque> buques;
+	private List<Buque> buques = new ArrayList<>();
 	private List<Viaje> viajes = new ArrayList<>();
-	
-	public Naviera(List<Buque> b) {
-		this.buques = b;
-	}
 	
 	public void registrarCircuito(Circuito c) {
 		this.circuitos.add(c);
 	}
 	
-	public void registrarViaje(Viaje v) {
-		viajes.add(v);
+	public void registrarBuque(Buque b) {
+		buques.add(b);
+	}
+	
+	public void programarNuevoViaje(Buque b, Circuito c, LocalDateTime fSalida, TerminalPortuaria tGestionada) {
+		if (!this.buques.contains(b) || !this.circuitos.contains(c)) {
+			throw new IllegalArgumentException("El buque o circuito no está registrado.");
+		}
+		
+		Viaje nuevoViaje = new Viaje(b, c, fSalida, tGestionada);
+		
+		b.setViaje(nuevoViaje);
+		
+		this.viajes.add(nuevoViaje);
 	}
 	
 	public Optional<LocalDateTime> proximaFechaHacia(TerminalPortuaria destino) {
@@ -65,5 +73,29 @@ public class Naviera {
 		} else {
 			throw new IllegalArgumentException("Alguna de las terminales no existe en el circuito o el circuito no recorre esas terminales en ese orden.");
 		}
+	}
+	
+	//Devuelve el circuito que va desde origen hasta destino con menor precio de recorrido.
+	public Circuito circuitoMenorPrecioDesdeHasta(TerminalPortuaria puertoOrigen, TerminalPortuaria puertoDestino) {
+		return this.circuitos.stream()
+								.filter(c -> c.recorreDesdeHasta(puertoOrigen, puertoDestino))
+								.min(Comparator.comparingDouble(c -> c.precioDesdeHasta(puertoOrigen, puertoDestino)))
+								.orElse(null);
+	}
+	
+	// Devuelve el circuito que va desde origen hasta destino con menor tiempo de recorrido.
+	public Circuito circuitoMenorTiempoDesdeHasta(TerminalPortuaria puertoOrigen, TerminalPortuaria puertoDestino) {
+		return this.circuitos.stream()
+								.filter(c -> c.recorreDesdeHasta(puertoOrigen, puertoDestino))
+								.min(Comparator.comparingInt(c -> c.tiempoDesdeHasta(puertoOrigen, puertoDestino)))
+								.orElse(null);
+	}
+	
+	//Devuelve el circuito que va desde origen hasta destino con menor puertos intermedios 
+	public Circuito circuitoMenorEscalasDesdeHasta(TerminalPortuaria origen, TerminalPortuaria destino) {
+		return this.circuitos.stream()
+								.filter(c -> c.recorreDesdeHasta(origen, destino))
+								.min(Comparator.comparingInt(c -> c.escalasDesdeHasta(origen, destino)))
+								.orElse(null);
 	}
 }

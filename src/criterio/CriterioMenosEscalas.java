@@ -2,33 +2,46 @@ package criterio;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import circuito.Circuito;
+import naviera.Naviera;
 import terminalPortuaria.TerminalPortuaria;
 
 public class CriterioMenosEscalas extends Criterio {
 
 	@Override
-	public Circuito mejorCircuito(List<Circuito> circuitos, TerminalPortuaria terminalGestionada,
+	public Circuito mejorCircuito(List<Naviera> navieras, TerminalPortuaria terminalGestionada,
 			TerminalPortuaria puertoDestino) {
-		if (circuitos.isEmpty()) {
-			throw new IllegalArgumentException("la lista de circuito esta vacia");
+		if (navieras.isEmpty()) {
+			throw new IllegalArgumentException("la lista de navieras esta vacia");
 		}
-		
-		List<Circuito> filtrados = this.filtrarCircuitos(circuitos, terminalGestionada, puertoDestino);
+		List<Naviera> filtrados = this.filtrarNavieras(navieras, terminalGestionada, puertoDestino);
 		return this.menosEscalas(filtrados, terminalGestionada, puertoDestino);
 	}
-
-	private Circuito menosEscalas(List<Circuito> filtrados, TerminalPortuaria terminalGestionada,
+	
+	
+	private Circuito menosEscalas(List<Naviera> filtradas, TerminalPortuaria terminalGestionada,
 			TerminalPortuaria puertoDestino) {
-		if (filtrados.isEmpty()) {
+		if (filtradas.isEmpty()) {
 			throw new IllegalArgumentException(
-					"No hay circuitos que recorran desde " + terminalGestionada + " hasta " + puertoDestino);
+					"No hay navieras que recorran desde " + terminalGestionada + " hasta " + puertoDestino);
 		}
 		
-		return filtrados.stream()
-			    .min(Comparator.comparing(circuito -> circuito.getEscalasDesdeHasta(terminalGestionada, puertoDestino)))
+		List<Circuito> circuitosFiltrados = this.filtrarCircuitos(filtradas,terminalGestionada,puertoDestino);
+		
+		return circuitosFiltrados.stream()
+			    .min(Comparator.comparing(c -> c.escalasDesdeHasta(terminalGestionada, puertoDestino)))
 			    .orElse(null);	
 		}
+
+
+	private List<Circuito> filtrarCircuitos(List<Naviera> filtradas, TerminalPortuaria terminalGestionada,
+			TerminalPortuaria puertoDestino) {
+		
+		return filtradas.stream().map(n -> n.getCircuitoMenorEscalasDesdeHasta(terminalGestionada, puertoDestino))
+				.collect(Collectors.toList());
+	}
+
 
 }
