@@ -97,5 +97,10 @@ public class Naviera {
 								.filter(c -> c.recorreDesdeHasta(origen, destino))
 								.min(Comparator.comparingInt(c -> c.escalasDesdeHasta(origen, destino)))
 								.orElse(null);
+
+	}
+
+	public List<Viaje> getViajesDeTerminal(TerminalPortuaria terminalGestionada) {
+		return null; //Devuelve todos los viajes donde aparece la terminal gestionada.
 	}
 }

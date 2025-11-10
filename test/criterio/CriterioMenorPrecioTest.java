@@ -81,9 +81,9 @@ class CriterioMenorPrecioTest {
 		when(c10.precioDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(106.00);
 		
 		//Filtrado de mejor circuito por cada naviera
-		when(n1.getCircuitoMenorPrecioDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c2);
-		when(n2.getCircuitoMenorPrecioDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c6);
-		when(n4.getCircuitoMenorPrecioDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c9);
+		when(n1.circuitoMenorPrecioDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c2);
+		when(n2.circuitoMenorPrecioDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c6);
+		when(n4.circuitoMenorPrecioDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c9);
 		
 		//Exercise
 		Circuito resultado = criterio.mejorCircuito(navieras,terminalGestionada,puertoDestino);
@@ -155,8 +155,8 @@ class CriterioMenorPrecioTest {
 	    when(c1.precioDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(100.00);
 	    when(c2.precioDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(100.00);
 	   
-	    when(n1.getCircuitoMenorPrecioDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c1);
-		when(n2.getCircuitoMenorPrecioDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c2);
+	    when(n1.circuitoMenorPrecioDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c1);
+		when(n2.circuitoMenorPrecioDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c2);
 	    
 	    
 	    
@@ -192,7 +192,7 @@ class CriterioMenorPrecioTest {
 	    
 	    when(c1.precioDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(200.00);
 	    
-	    when(n1.getCircuitoMenorPrecioDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c1);
+	    when(n1.circuitoMenorPrecioDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c1);
 	    
 	    Circuito resultado = criterio.mejorCircuito(navieras, terminalGestionada, puertoDestino);
 	    
