@@ -38,7 +38,7 @@ public class CriterioMenorPrecio extends Criterio{
 
 	private List<Circuito> filtrarCircuitos(List<Naviera> filtradas, TerminalPortuaria terminalGestionada,
 			TerminalPortuaria puertoDestino) {
-		return filtradas.stream().map(n -> n.getCircuitoMenorPrecioDesdeHasta(terminalGestionada, puertoDestino))
+		return filtradas.stream().map(n -> n.circuitoMenorPrecioDesdeHasta(terminalGestionada, puertoDestino))
 				.collect(Collectors.toList());
 	}
 
