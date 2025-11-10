@@ -1,9 +1,6 @@
 package orden;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
-
 import container.Container;
 import empresaTransportista.Camion;
 import empresaTransportista.Chofer;
@@ -12,48 +9,69 @@ import viaje.Viaje;
 import visitor.ReportVisitor;
 
 public class Orden {
-	private LocalDate turno;
-	private Camion camionAsignado;
 	private ArrayList <Servicio> servicios = new ArrayList<Servicio>();
-	private Viaje viaje;
 	private Container container;
+	private Camion camionAsignado;
+	private Viaje viaje;
 	
-	/*public Chofer choferAsignado{
-		return camionAsignado.getConductor();
-	}*/
-	public void facturarServicios() {
-		
+	
+	
+	public Orden(Container container, Camion camionAsignado, Viaje viaje) {
+		super();
+		this.container = container;
+		this.camionAsignado = camionAsignado;
+		this.viaje = viaje;
+		this.servicios = new ArrayList<>();
 	}
+	//DATOS DE LA CARGA
 	public Container getContainer() {
 		return container;
 	}
-	public void setContainer(Container container) {
-		this.container = container;
+	// public void facturarServicios() preguntar si se hace
+	
+
+	public Chofer choferAsignado{
+		return this.getCamionAsignado().getConductor();//HACER
 	}
-	public void accept(ReportVisitor visitor) {
-		visitor.visitOrden(this);
+	
+	public void setCamionAsignado(Camion camionAsignado) {
+		this.camionAsignado = camionAsignado;
 	}
-	public double montoTotal() {
-		
-	}
-	/////////////////////////////////////////////////////
 	public double montoTotalServicios() {
 	
 			return this.servicios.stream().mapToDouble( s -> s.costoServicio(this)  ).sum();
-		}
-	///////////////////////////////////////////////////
+	}
+	
+	public void agregarServicio(Servicio servicio) {
+		servicios.add(servicio);
+	}
+
+	//GETTERS
+	public ArrayList<Servicio> getServicios() {
+		return servicios;
+	}
 	public Viaje getViaje() {
 		return viaje;
+	}
+	
+	public Camion getCamionAsignado() {
+		return camionAsignado;
+	}
+	
+	//SETTERS
+	public void setServicios(ArrayList<Servicio> servicios) {
+		this.servicios = servicios;
 	}
 	public void setViaje(Viaje viaje) {
 		this.viaje = viaje;
 	}
-	////////////////////////////////////////////////////
-	public ArrayList<Servicio> getServicios() {
-		return servicios;
+	
+	public void setContainer(Container container) {
+		this.container = container;
 	}
-	public void setServicios(ArrayList<Servicio> servicios) {
-		this.servicios = servicios;
-	}
+	//REPORTES
+/*	public void accept(ReportVisitor visitor) {
+		visitor.visitOrden(this);
+	}*/
 }
 
