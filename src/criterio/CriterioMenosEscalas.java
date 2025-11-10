@@ -39,7 +39,7 @@ public class CriterioMenosEscalas extends Criterio {
 	private List<Circuito> filtrarCircuitos(List<Naviera> filtradas, TerminalPortuaria terminalGestionada,
 			TerminalPortuaria puertoDestino) {
 		
-		return filtradas.stream().map(n -> n.getCircuitoMenorEscalasDesdeHasta(terminalGestionada, puertoDestino))
+		return filtradas.stream().map(n -> n.circuitoMenorEscalasDesdeHasta(terminalGestionada, puertoDestino))
 				.collect(Collectors.toList());
 	}
 

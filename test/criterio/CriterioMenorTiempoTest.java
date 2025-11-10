@@ -80,9 +80,9 @@ class CriterioMenorTiempoTest {
 		when(c10.tiempoDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(10);
 
 		//Filtrado de mejor circuito por cada naviera
-		when(n1.getCircuitoMenorTiempoDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c2);
-		when(n2.getCircuitoMenorTiempoDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c6);
-		when(n4.getCircuitoMenorTiempoDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c9);
+		when(n1.circuitoMenorTiempoDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c2);
+		when(n2.circuitoMenorTiempoDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c6);
+		when(n4.circuitoMenorTiempoDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c9);
 
 		//Exercise
 		Circuito resultado = criterio.mejorCircuito(navieras,terminalGestionada,puertoDestino);
@@ -154,8 +154,8 @@ class CriterioMenorTiempoTest {
 	    when(c1.tiempoDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(10);//Calculado en dias
 	    when(c2.tiempoDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(10);//Calculado en dias
 	   
-	    when(n1.getCircuitoMenorTiempoDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c1);
-		when(n2.getCircuitoMenorTiempoDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c2);
+	    when(n1.circuitoMenorTiempoDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c1);
+		when(n2.circuitoMenorTiempoDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c2);
 	    
 	    
 	    
@@ -191,7 +191,7 @@ class CriterioMenorTiempoTest {
 	    
 	    when(c1.tiempoDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(20);
 	    
-	    when(n1.getCircuitoMenorTiempoDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c1);
+	    when(n1.circuitoMenorTiempoDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c1);
 	    
 	    Circuito resultado = criterio.mejorCircuito(navieras, terminalGestionada, puertoDestino);
 	    

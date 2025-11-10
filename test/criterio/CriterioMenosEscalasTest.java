@@ -84,9 +84,9 @@ class CriterioMenosEscalasTest {
 		when(c10.escalasDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(16);
 		
 		//Filtrado de menor circuito por cada naviera
-		when(n1.getCircuitoMenorEscalasDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c2);
-		when(n2.getCircuitoMenorEscalasDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c6);
-		when(n4.getCircuitoMenorEscalasDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c9);
+		when(n1.circuitoMenorEscalasDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c2);
+		when(n2.circuitoMenorEscalasDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c6);
+		when(n4.circuitoMenorEscalasDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c9);
 		
 		
 		//Exercise
@@ -159,8 +159,8 @@ class CriterioMenosEscalasTest {
 	    when(c1.escalasDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(10);
 	    when(c2.escalasDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(10);
 	    
-	    when(n1.getCircuitoMenorEscalasDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c1);
-		when(n2.getCircuitoMenorEscalasDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c2);
+	    when(n1.circuitoMenorEscalasDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c1);
+		when(n2.circuitoMenorEscalasDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c2);
 	    
 	    
 	    
@@ -196,7 +196,7 @@ class CriterioMenosEscalasTest {
 	    
 	    when(c1.escalasDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(20);
 	    
-	    when(n1.getCircuitoMenorEscalasDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c1);
+	    when(n1.circuitoMenorEscalasDesdeHasta(terminalGestionada, puertoDestino)).thenReturn(c1);
 	    
 	    Circuito resultado = criterio.mejorCircuito(navieras, terminalGestionada, puertoDestino);
 	    

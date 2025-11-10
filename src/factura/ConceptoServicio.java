@@ -23,6 +23,5 @@ public class ConceptoServicio {
 	public double getMonto() {
 		return monto;
 	}
-	
-	
+
 }
