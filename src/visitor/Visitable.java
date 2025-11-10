@@ -1,7 +1,5 @@
 package visitor;
 
 public interface Visitable {
-	public void accept(ReportVisitor visitor) {
-		
-	}
+	void accept(ReportVisitor visitor);
 }

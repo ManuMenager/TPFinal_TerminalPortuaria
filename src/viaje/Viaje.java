@@ -27,7 +27,7 @@ public class Viaje {
 		this.cronograma = crearCronograma(circuito);
 	}
 	
-	private LocalDateTime fechaSalidaTerminalGestionada() {
+	public LocalDateTime fechaSalidaTerminalGestionada() {
 		return this.cronograma.get(terminalGestionada);
 	}
 

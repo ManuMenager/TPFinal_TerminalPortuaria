@@ -7,8 +7,9 @@ import empresaTransportista.Chofer;
 import servicio.Servicio;
 import viaje.Viaje;
 import visitor.ReportVisitor;
+import visitor.Visitable;
 
-public class Orden {
+public class Orden implements Visitable{
 	private ArrayList <Servicio> servicios = new ArrayList<Servicio>();
 	private Container container;
 	private Camion camionAsignado;
@@ -30,9 +31,9 @@ public class Orden {
 	// public void facturarServicios() preguntar si se hace
 	
 
-	public Chofer choferAsignado{
+	/*public Chofer choferAsignado{
 		return this.getCamionAsignado().getConductor();//HACER
-	}
+	}*/
 	
 	public void setCamionAsignado(Camion camionAsignado) {
 		this.camionAsignado = camionAsignado;
@@ -69,9 +70,11 @@ public class Orden {
 	public void setContainer(Container container) {
 		this.container = container;
 	}
-	//REPORTES
-/*	public void accept(ReportVisitor visitor) {
-		visitor.visitOrden(this);
-	}*/
+	// Para el ReportVisitor
+		@Override
+		public void accept(ReportVisitor visitor) {
+			visitor.visit(this);
+		}
+		
 }
 
