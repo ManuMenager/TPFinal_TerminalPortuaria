@@ -6,5 +6,6 @@ public class Shipper extends Cliente{
 		super(nombre, apellido, dni, email);
 		
 	}
+	
 
 }

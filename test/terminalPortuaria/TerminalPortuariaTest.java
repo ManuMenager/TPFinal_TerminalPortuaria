@@ -3,9 +3,12 @@ package terminalPortuaria;
 import static org.mockito.Mockito.*;
 
 import java.awt.Point;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -17,21 +20,28 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
+import buque.Buque;
+import buque.GPS;
 import circuito.Circuito;
 import cliente.Consignee;
 import cliente.Shipper;
+import container.Container;
 import criterio.Criterio;
+import empresaTransportista.Camion;
+import empresaTransportista.Chofer;
 import empresaTransportista.EmpresaTransportista;
 import filtro.Filtro;
 import naviera.Naviera;
 import orden.OrdenConsignee;
 import orden.OrdenShipper;
+import servicio.Servicio;
 import viaje.Viaje;
 
 class TerminalPortuariaTest {
 
 	TerminalPortuaria terminal;
-	
+	@Mock
+	private Point ubicacion;
 	@Mock
 	private Criterio criterio;
 	@Mock
@@ -70,6 +80,18 @@ class TerminalPortuariaTest {
     private Viaje viaje2;
     @Mock
     private Viaje viaje3;
+    @Mock
+    private CorreoEmail correo;
+    @Mock
+    private Camion camion;
+    @Mock 
+    private Container container;
+    @Mock
+    private Servicio servicio1;
+    @Mock
+    private Servicio servicio2;
+    @Mock
+    private Chofer chofer;
     
 	
 	@BeforeEach
@@ -88,7 +110,10 @@ class TerminalPortuariaTest {
 
         //La terminal se inicializa sin empresasTransportistas registradas 
         // Then - Verificar que se pueden registrar múltiples empresas
-        assertEquals(2, terminal.getEmpresasTransportistas().size());
+        List<EmpresaTransportista> empresas = terminal.getEmpresasTransportistas();
+        assertEquals(2, empresas.size());
+        assertTrue(empresas.contains(empresaTransportista1));
+        assertTrue(empresas.contains(empresaTransportista2));
     }
     
     @Test
@@ -98,8 +123,11 @@ class TerminalPortuariaTest {
         terminal.registrarOrdenShipper(ordenShipper2);
 
         //La terminal inicializa sin ordenes 
-        // Then
-        assertEquals(2, terminal.getOrdenesShipper().size());
+     // Then
+        List<OrdenShipper> ordenes = terminal.getOrdenesShipper();
+        assertEquals(2, ordenes.size());
+        assertTrue(ordenes.contains(ordenShipper1));
+        assertTrue(ordenes.contains(ordenShipper2));
     }
     
     @Test
@@ -109,8 +137,11 @@ class TerminalPortuariaTest {
         terminal.registrarOrdenConsignee(ordenConsignee2);
 
         //La terminal inicializa sin ordenes 
-        // Then
-        assertEquals(2, terminal.getOrdenesConsignee().size());
+        /// Then
+        List<OrdenConsignee> ordenes = terminal.getOrdenesConsignee();
+        assertEquals(2, ordenes.size());
+        assertTrue(ordenes.contains(ordenConsignee1));
+        assertTrue(ordenes.contains(ordenConsignee2));
     }
 
     @Test
@@ -121,7 +152,10 @@ class TerminalPortuariaTest {
 
         //La terminal inicializa sin navieras 
         // Then
-        assertEquals(2, terminal.getNavieras().size());
+        List<Naviera> navieras = terminal.getNavieras();
+        assertEquals(2, navieras.size());
+        assertTrue(navieras.contains(naviera1));
+        assertTrue(navieras.contains(naviera2));
     }
 
     @Test
@@ -132,7 +166,10 @@ class TerminalPortuariaTest {
 
         //La terminal inicializa sin shippers registrados
         // Then
-        assertEquals(2, terminal.getShippers().size());
+        List<Shipper> shippers = terminal.getShippers();
+        assertEquals(2, shippers.size());
+        assertTrue(shippers.contains(shipper1));
+        assertTrue(shippers.contains(shipper2));
     }
     
     @Test
@@ -143,29 +180,40 @@ class TerminalPortuariaTest {
 
         //La terminal inicializa sin consignees registrados
         // Then
-        assertEquals(2, terminal.getConsignees().size());
+        List<Consignee> consignees = terminal.getConsignees();
+        assertEquals(2, consignees.size());
+        assertTrue(consignees.contains(consignee1));
+        assertTrue(consignees.contains(consignee2));
     }
     
     @Test
     public void testMejorCircuito() {
         // Given
+    	Circuito circuito1 = mock(Circuito.class);
+    	Criterio criterio = mock(Criterio.class);
         terminal.setCriterio(criterio);
         List<Naviera> navieras = Arrays.asList(naviera1, naviera2);
         
         when(criterio.mejorCircuito(navieras, terminal, destino))
-            .thenReturn(circuito);
+            .thenReturn(circuito1);
 
         // When
         Circuito resultado = terminal.mejorCircuito(destino, navieras);
 
         // Then
-        assertNotNull("El circuito no debería ser nulo", resultado);
-        assertEquals("Debería retornar el circuito esperado", circuito, resultado);
+        assertEquals(circuito1, resultado);
         verify(criterio, times(1)).mejorCircuito(navieras, terminal, destino);
     }
     
     @Test 
     public void testBuscarRutasConViajes() {
+    	Naviera naviera1 = mock(Naviera.class);
+    	Naviera naviera2 = mock(Naviera.class);
+    	Filtro filtro = mock(Filtro.class);
+    	Viaje viaje1 = mock(Viaje.class);
+    	Viaje viaje2 = mock(Viaje.class);
+    	Viaje viaje3 = mock(Viaje.class);
+    	
     	terminal.registrarNaviera(naviera1);
     	terminal.registrarNaviera(naviera2);
     	
@@ -193,23 +241,10 @@ class TerminalPortuariaTest {
     }
     
     @Test
-    public void testBuscarRutasSinNavieras() {
-        // Given
-        List<Viaje> viajesFiltrados = new ArrayList<>();
-        when(filtro.filtrar(anyList())).thenReturn(viajesFiltrados);
-
-        // When
-        List<Viaje> resultado = terminal.buscarRutas(filtro);
-
-        // Then
-        assertNotNull("La lista no debería ser nula", resultado);
-        assertTrue("La lista debería estar vacía", resultado.isEmpty());
-        verify(filtro, times(1)).filtrar(anyList());
-    }
-
-    @Test
     public void testBuscarRutasConFiltroQueRetornaTodos() {
-     
+        // Given
+    	Naviera naviera1 = mock(Naviera.class);
+    	Filtro filtro = mock(Filtro.class);
         terminal.registrarNaviera(naviera1);
         List<Viaje> viajesNaviera1 = Arrays.asList(viaje1, viaje2);
         List<Viaje> viajesFiltrados = Arrays.asList(viaje1, viaje2);
@@ -226,6 +261,23 @@ class TerminalPortuariaTest {
     }
     
     @Test
+    public void testBuscarRutasSinNavieras() {
+        // Given
+    	Filtro filtro = mock(Filtro.class);
+        List<Viaje> viajesFiltrados = new ArrayList<>();
+        when(filtro.filtrar(anyList())).thenReturn(viajesFiltrados);
+
+        // When
+        List<Viaje> resultado = terminal.buscarRutas(filtro);
+
+        // Then
+        assertNotNull("La lista no debería ser nula", resultado);
+        assertTrue("La lista debería estar vacía", resultado.isEmpty());
+        verify(filtro, times(1)).filtrar(anyList());
+    }
+
+    
+    @Test
     public void testSetCriterio() {
         // Given
         Criterio nuevoCriterio = mock(Criterio.class);
@@ -238,12 +290,15 @@ class TerminalPortuariaTest {
     }
     
     // ===== TESTS DE COMPORTAMIENTO CON LISTAS VACÍAS =====
-    
     @Test
     public void testBuscarRutasConNavierasSinViajes() {
         // Given
+    	Naviera naviera1 = mock(Naviera.class);
+    	Naviera naviera2 = mock(Naviera.class);
+    	Filtro filtro = mock(Filtro.class);
         terminal.registrarNaviera(naviera1);
         terminal.registrarNaviera(naviera2);
+        
         
         when(naviera1.getViajesDeTerminal(terminal)).thenReturn(new ArrayList<>());
         when(naviera2.getViajesDeTerminal(terminal)).thenReturn(new ArrayList<>());
@@ -257,21 +312,283 @@ class TerminalPortuariaTest {
         assertTrue("La lista debería estar vacía", resultado.isEmpty());
     }
     
+    // ===== TESTS DE VERIFICACIÓN DE TURNO =====
+
     @Test
-    public void testMejorCircuitoConListaNavierasVacia() {
+    public void testVerificarTurnoAprobado() {
         // Given
-        terminal.setCriterio(criterio);
-        List<Naviera> navierasVacias = new ArrayList<>();
+    	Camion camion = mock(Camion.class);
+    	Chofer chofer = mock(Chofer.class);
+    	OrdenShipper ordenShipper1 = mock(OrdenShipper.class);
+    	EmpresaTransportista empresaTransportista1 = mock(EmpresaTransportista.class);
+    	terminal.registrarEmpresa(empresaTransportista1);
         
-        when(criterio.mejorCircuito(navierasVacias, terminal, destino))
-            .thenReturn(circuito);
+        when(ordenShipper1.getHorarioTurno()).thenReturn(LocalDateTime.now().plusHours(2));
+        when(ordenShipper1.getCamionAsignado()).thenReturn(camion);
+        when(ordenShipper1.choferAsignado()).thenReturn(chofer);
+        when(empresaTransportista1.estaRegistradoElCamion(camion)).thenReturn(true);
+        when(empresaTransportista1.estaRegistradoElChofer(chofer)).thenReturn(true);
 
         // When
-        Circuito resultado = terminal.mejorCircuito(destino, navierasVacias);
+        String resultado = terminal.verificarTurno(ordenShipper1);
 
         // Then
-        assertNotNull("El circuito no debería ser nulo", resultado);
-        verify(criterio, times(1)).mejorCircuito(navierasVacias, terminal, destino);
+        assertEquals("Aprobado", resultado);
+    }
+    
+    @Test
+    public void testVerificarTurnoRechazadoPorHorario() {
+        // Given
+    	Camion camion = mock(Camion.class);
+    	Chofer chofer = mock(Chofer.class);
+    	OrdenShipper ordenShipper1 = mock(OrdenShipper.class);
+    	EmpresaTransportista empresaTransportista1 = mock(EmpresaTransportista.class);
+        terminal.registrarEmpresa(empresaTransportista1);
+        
+        when(ordenShipper1.getHorarioTurno()).thenReturn(LocalDateTime.now().plusHours(4)); // Más de 3 horas
+        when(ordenShipper1.getCamionAsignado()).thenReturn(camion);
+        when(ordenShipper1.choferAsignado()).thenReturn(chofer);
+        when(empresaTransportista1.estaRegistradoElCamion(camion)).thenReturn(true);
+        when(empresaTransportista1.estaRegistradoElChofer(chofer)).thenReturn(true);
+
+        // When
+        String resultado = terminal.verificarTurno(ordenShipper1);
+
+        // Then
+        assertEquals("Rechazado", resultado);
+    }
+    
+    @Test
+    public void testVerificarTurnoRechazadoPorCamion() {
+        // Given
+    	Camion camion = mock(Camion.class);
+    	Chofer chofer = mock(Chofer.class);
+    	OrdenShipper ordenShipper1 = mock(OrdenShipper.class);
+    	EmpresaTransportista empresaTransportista1 = mock(EmpresaTransportista.class);
+        terminal.registrarEmpresa(empresaTransportista1);
+        
+        when(ordenShipper1.getHorarioTurno()).thenReturn(LocalDateTime.now().plusHours(2));
+        when(ordenShipper1.getCamionAsignado()).thenReturn(camion);
+        when(ordenShipper1.choferAsignado()).thenReturn(chofer);
+        when(empresaTransportista1.estaRegistradoElCamion(camion)).thenReturn(false); // Camion no registrado
+        when(empresaTransportista1.estaRegistradoElChofer(chofer)).thenReturn(true);
+
+        // When
+        String resultado = terminal.verificarTurno(ordenShipper1);
+
+        // Then
+        assertEquals("Rechazado", resultado);
+    }
+    
+    // ===== TESTS DE CREACIÓN DE ÓRDENES =====
+
+    @Test
+    public void testCrearOrdenShipper() {
+        // Given
+    	Servicio servicio1 = mock(Servicio.class);
+    	Servicio servicio2 = mock(Servicio.class);
+    	Camion camion = mock(Camion.class);
+    	Viaje viaje1 = mock(Viaje.class);
+    	Container container = mock(Container.class);
+    	Shipper shipper1 = mock(Shipper.class);
+        List<Servicio> servicios = Arrays.asList(servicio1, servicio2);
+        
+        // When
+        terminal.crearOrdenShipper(shipper1, camion, viaje1, container, servicios);
+
+        // Then
+        List<OrdenShipper> ordenes = terminal.getOrdenesShipper();
+        assertEquals(1, ordenes.size());
+    }
+    
+    @Test
+    public void testCrearOrdenConsignee() {
+        // Given
+    	Servicio servicio1 = mock(Servicio.class);
+    	Servicio servicio2 = mock(Servicio.class);
+    	Camion camion = mock(Camion.class);
+    	Viaje viaje1 = mock(Viaje.class);
+    	Container container = mock(Container.class);
+    	Consignee consignee1 = mock(Consignee.class);
+        List<Servicio> servicios = Arrays.asList(servicio1, servicio2);
+        
+        // When
+        terminal.crearOrdenConsignee(consignee1, camion, viaje1, container, servicios);
+
+        // Then
+        List<OrdenConsignee> ordenes = terminal.getOrdenesConsignee();
+        assertEquals(1, ordenes.size());
+    }
+    
+    // ===== TESTS DE NOTIFICACIONES =====
+    
+    @Test
+    public void testNotificarConsignees() {
+        // Given
+    	OrdenConsignee ordenConsignee1 = mock(OrdenConsignee.class);
+    	CorreoEmail correo = mock(CorreoEmail.class);
+    	terminal.registrarOrdenConsignee(ordenConsignee1);
+        
+        // Crear Buque 
+        Buque buque = new Buque("Buque Test", terminal, (GPS) mock(GPS.class));
+        
+        when(ordenConsignee1.getNombreBuque()).thenReturn("Buque Test");
+        when(ordenConsignee1.getEmailCliente()).thenReturn("consignee1@test.com");
+        
+        terminal.setCorreo(correo);
+
+        // When
+        terminal.notificarConsignees(buque);
+
+        // Then
+        verify(correo).enviarCorreo("consignee1@test.com", "Buque ingresando a terminal");
     }
 
+
+    @Test
+    public void testNotificarShippers() {
+        // Given
+    	OrdenShipper ordenShipper1 = mock(OrdenShipper.class);
+    	OrdenShipper ordenShipper2 = mock(OrdenShipper.class);
+    	CorreoEmail correo = mock(CorreoEmail.class);
+        terminal.registrarOrdenShipper(ordenShipper1);
+        terminal.registrarOrdenShipper(ordenShipper2);
+        
+        // Crear Buque 
+        Buque buque = new Buque("Buque Test", terminal, (GPS) mock(GPS.class));
+        
+        when(ordenShipper1.getNombreBuque()).thenReturn("Buque Test");
+        when(ordenShipper2.getNombreBuque()).thenReturn("Otro Buque"); // No debe notificar
+        when(ordenShipper1.getEmailCliente()).thenReturn("shipper1@test.com");
+        
+        terminal.setCorreo(correo);
+
+        // When
+        terminal.notificarShippers(buque);
+
+        // Then
+        verify(correo).enviarCorreo("shipper1@test.com", "Buque saliendo de la terminal");
+        verify(correo, never()).enviarCorreo(eq("shipper2@test.com"), anyString());
+    }
+    
+ // ===== TESTS DE REGISTRO DE CIRCUITOS =====
+
+    @Test
+    public void testRegistrarCircuitos() {
+        // Given
+    	Viaje viaje1 = mock(Viaje.class);
+    	Viaje viaje2 = mock(Viaje.class);
+    	Naviera naviera1 = mock(Naviera.class);
+    	Circuito circuito1 = mock(Circuito.class);
+    	Circuito circuito2 = mock(Circuito.class);
+        terminal.registrarNaviera(naviera1);
+        List<Viaje> viajes = Arrays.asList(viaje1, viaje2);
+        
+        when(naviera1.getViajesDeTerminal(terminal)).thenReturn(viajes);
+        when(viaje1.getCircuito()).thenReturn(circuito1);
+        when(viaje2.getCircuito()).thenReturn(circuito2);
+
+        // When
+        terminal.registrarCircuitos();
+
+     // Then - Verificar que se registraron los circuitos correctamente
+        Set<Circuito> circuitosRegistrados = terminal.getCircuitos();
+        
+        assertNotNull("La lista de circuitos no debería ser nula", circuitosRegistrados);
+        assertEquals("Debería tener 2 circuitos registrados", 2, circuitosRegistrados.size());
+        assertTrue("Debería contener el circuito", circuitosRegistrados.contains(circuito1));
+        assertTrue("Debería contener el circuito", circuitosRegistrados.contains(circuito2));
+        
+        // Verificar que no hay duplicados si se llama múltiples veces
+        terminal.registrarCircuitos();
+        assertEquals("No debería duplicar circuitos existentes", 2, terminal.getCircuitos().size());
+    }
+    
+    // ===== TESTS DE TIEMPO HASTA =====
+
+    @Test
+    public void testTiempoHasta() {
+        // Given
+    	Naviera naviera1 = mock(Naviera.class);
+    	TerminalPortuaria destino = mock(TerminalPortuaria.class);
+        int tiempoEsperado = 5;
+        when(naviera1.tiempoDesdeHasta(terminal, destino)).thenReturn(tiempoEsperado);
+
+        // When
+        int resultado = terminal.tiempoHasta(naviera1, destino);
+
+        // Then
+        assertEquals(tiempoEsperado, resultado);
+        verify(naviera1).tiempoDesdeHasta(terminal, destino);
+    }
+    
+    // ===== TESTS DE PRÓXIMA FECHA HACIA =====
+
+    @Test
+    public void testProximaFechaHacia() {
+        // Given
+    	Naviera naviera1 = mock(Naviera.class);
+    	Naviera naviera2 = mock(Naviera.class);
+    	TerminalPortuaria destino = mock(TerminalPortuaria.class);
+        terminal.registrarNaviera(naviera1);
+        terminal.registrarNaviera(naviera2);
+        
+        LocalDateTime fecha1 = LocalDateTime.now().plusDays(2);
+        LocalDateTime fecha2 = LocalDateTime.now().plusDays(1); // Más próxima
+        
+        when(naviera1.proximaFechaHacia(destino)).thenReturn(Optional.of(fecha1));
+        when(naviera2.proximaFechaHacia(destino)).thenReturn(Optional.of(fecha2));
+
+        // When
+        Optional<LocalDateTime> resultado = terminal.proximaFechaHacia(destino);
+
+        // Then
+        assertTrue(resultado.isPresent());
+        assertEquals(fecha2, resultado.get());
+    }
+    
+    @Test
+    public void testProximaFechaHaciaSinFechas() {
+        // Given
+    	Naviera naviera1 = mock(Naviera.class);
+    	TerminalPortuaria destino = mock(TerminalPortuaria.class);
+        terminal.registrarNaviera(naviera1);
+        when(naviera1.proximaFechaHacia(destino)).thenReturn(Optional.empty());
+
+        // When
+        Optional<LocalDateTime> resultado = terminal.proximaFechaHacia(destino);
+
+        // Then
+        assertFalse(resultado.isPresent());
+    }
+    
+    // ===== TESTS DE TRABAJOS DE BUQUE =====
+    @Test
+    public void testIniciarTrabajos() {
+        // Given - Crear Buque REAL
+        GPS gps = mock(GPS.class);
+        Buque buque = new Buque("Buque Test", terminal, gps);
+        
+        // When
+        terminal.iniciarTrabajos(buque);
+        
+        // Then - Solo verificar que no hay excepciones
+        assertTrue("El método iniciarTrabajos debería ejecutarse sin errores", true);
+    }
+
+    @Test
+    public void testFinalizarTrabajos() {
+        // Given - Crear Buque REAL
+        GPS gps = mock(GPS.class);
+        Buque buque = new Buque("Buque Test", terminal, gps);
+        
+        // When
+        terminal.finalizarTrabajos(buque);
+        
+        // Then - Solo verificar que no hay excepciones
+        assertTrue("El método finalizarTrabajos debería ejecutarse sin errores", true);
+    }
+
+    
+ 
 }

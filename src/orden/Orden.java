@@ -1,6 +1,7 @@
 package orden;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +55,14 @@ public class Orden {
 	}
 	public void setServicios(ArrayList<Servicio> servicios) {
 		this.servicios = servicios;
+	}
+	public Camion getCamionAsignado() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public LocalDateTime getHorarioTurno() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
 

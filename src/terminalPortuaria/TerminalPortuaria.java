@@ -4,19 +4,27 @@ import java.awt.Point;
 
 import buque.Buque;
 import java.lang.reflect.AccessFlag.Location;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import circuito.Circuito;
 import cliente.Consignee;
 import cliente.Shipper;
+import container.Container;
 import criterio.Criterio;
+import empresaTransportista.Camion;
 import empresaTransportista.EmpresaTransportista;
 import filtro.Filtro;
 import naviera.Naviera;
+import orden.Orden;
 import orden.OrdenConsignee;
 import orden.OrdenShipper;
+import servicio.Servicio;
 import viaje.Viaje;
 
 public class TerminalPortuaria {
@@ -30,10 +38,16 @@ public class TerminalPortuaria {
 	private List<Consignee> importadores = new ArrayList<Consignee>();
 	private List<Shipper> exportadores = new ArrayList<Shipper>();
 	private List<Naviera> navieras = new ArrayList<Naviera>();
+	private CorreoEmail correo;
+	private Set<Circuito> circuitos = new HashSet<Circuito>();
 	
 	public TerminalPortuaria(String nombre, Point ubicacion) {
 		this.nombre = nombre;
 		this.ubicacion = ubicacion;
+	}
+	
+	public void setCorreo(CorreoEmail correo) {
+		this.correo = correo;
 	}
 	
 	public void setCriterio(Criterio criterio) {
@@ -104,28 +118,104 @@ public class TerminalPortuaria {
 				.collect(Collectors.toList());
 	}
 	
-	public void notificarConsignees() {
+	public String verificarTurno(OrdenShipper orden) { //Entrega Terrestre de Carga
+		if(this.verificarHorario(orden) && this.verificarCamion(orden) && this.verificarChofer(orden)) {
+			return "Aprobado";
+		}
+		else {
+			return "Rechazado";
+		}
+	}
+	
+	private boolean verificarChofer(OrdenShipper orden) {
 		// TODO Auto-generated method stub
-		
+		return empresasTransportistas.stream().anyMatch(e -> e.estaRegistradoElChofer(orden.choferAsignado()));
 	}
 
-	public void notificarShippers() {
+	private boolean verificarCamion(Orden orden) {
 		// TODO Auto-generated method stub
+		return empresasTransportistas.stream().anyMatch(e -> e.estaRegistradoElCamion(orden.getCamionAsignado()));
+	}
+
+	private boolean verificarHorario(Orden orden) {
+		// TODO Auto-generated method stub
+		LocalDateTime horaActual = LocalDateTime.now();
+		return orden.getHorarioTurno().isBefore(horaActual.plusHours(3)); //Devuelve true cuando no se paso de las 3 horas
+	}
+	
+	public void crearOrdenShipper(Shipper shipper, Camion camion, Viaje viaje,
+			Container container, List<Servicio> servicios) {
 		
+		OrdenShipper orden = new OrdenShipper(shipper,camion,viaje,container,servicios);
+		this.registrarOrdenShipper(orden);
+	}
+	
+	public void crearOrdenConsignee(Consignee consignee, Camion camion, Viaje viaje,
+			Container container, List<Servicio> servicios) {
+		
+		OrdenConsignee orden = new OrdenConsignee(consignee,camion,viaje,container,servicios);
+		this.registrarOrdenConsignee(orden);
+	}
+
+	public void notificarConsignees(Buque b) {
+		List<OrdenConsignee> ordenesFiltradas = this.getOrdenesConsignee()
+                .stream()
+                .filter(orden -> orden.getNombreBuque().equals(b.getNombre()))
+                .collect(Collectors.toList());
+		for (OrdenConsignee orden : ordenesFiltradas) {
+			String emailConsignee = orden.getEmailCliente();
+			this.correo.enviarCorreo(emailConsignee, "Buque ingresando a terminal");
+		}
+	}
+
+	public void notificarShippers(Buque b) {
+		List<OrdenShipper> ordenesFiltradas = this.getOrdenesShipper()
+                .stream()
+                .filter(orden -> orden.getNombreBuque().equals(b.getNombre()))
+                .collect(Collectors.toList());
+		for (OrdenShipper orden : ordenesFiltradas) {
+			String emailShipper = orden.getEmailCliente();
+			this.correo.enviarCorreo(emailShipper, "Buque saliendo de la terminal");
+		}
+	}
+	
+	public void registrarCircuitos() {
+		// Registrar los circuitos marítimos que incluyen a la terminal, considerando las fechas
+		//de las distintas programaciones de viajes (fechas de arribo a la propia terminal y a
+		//		todas las demás de los circuitos que la incluyen)7
+		
+		List<Viaje> viajes = this.getViajes();
+		for (Viaje viaje : viajes) {
+			Circuito circuitoARegistrar = viaje.getCircuito();
+			circuitos.add(circuitoARegistrar);
+		}
+	}
+	
+	public Set<Circuito> getCircuitos() {
+		return this.circuitos;
+	}
+	
+	public int tiempoHasta(Naviera n, TerminalPortuaria destino) {
+		return n.tiempoDesdeHasta(this, destino);
+	}
+	
+	public Optional <LocalDateTime> proximaFechaHacia(TerminalPortuaria destino) {
+		return this.navieras
+	            .stream()
+	            .flatMap(n -> n.proximaFechaHacia(destino).stream()) 
+	            .min(LocalDateTime::compareTo);
 	}
 
 	public Point getPosicion() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.ubicacion;
 	}
 	
 	public void iniciarTrabajos(Buque b) {
-		// TODO Auto-generated method stub
-		
+		b.iniciarTrabajos();
 	}
 
 	public void finalizarTrabajos(Buque b) {
-		// TODO Auto-generated method stub
-		
+		b.finalizarTrabajos();
 	}
 }

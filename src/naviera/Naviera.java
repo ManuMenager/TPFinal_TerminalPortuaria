@@ -103,4 +103,9 @@ public class Naviera {
 	public List<Viaje> getViajesDeTerminal(TerminalPortuaria terminalGestionada) {
 		return null; //Devuelve todos los viajes donde aparece la terminal gestionada.
 	}
+
+	public int tiempoDesdeHasta(TerminalPortuaria origen, TerminalPortuaria destino) {
+		return 0; //Devolver cuánto tarda una naviera en llegar desde la terminal gestionada hacia otra
+		//terminal, independientemente de las fechas de los viajes programados.
+	}
 }
