@@ -23,8 +23,8 @@ class FiltroPuertoDestinoTest {
         Viaje viajeNoCoincidente = mock(Viaje.class);
         
         //Configuro el comportamiento de los mocks 
-        when(viajeCoincidente.tieneComoPuertoDestino(puertoDestino)).thenReturn(true);
-        when(viajeNoCoincidente.tieneComoPuertoDestino(puertoDestino)).thenReturn(false);
+        when(viajeCoincidente.tienePuertoDestino(puertoDestino)).thenReturn(true);
+        when(viajeNoCoincidente.tienePuertoDestino(puertoDestino)).thenReturn(false);
         
         //Armo lista de viaje a filtrar y construyo el filtro con la fechaFiltro
         List<Viaje> viajes = Arrays.asList(viajeCoincidente, viajeNoCoincidente);
@@ -36,8 +36,8 @@ class FiltroPuertoDestinoTest {
         // Verify - Verificacion de los resultados esperados 
         assertEquals(1, resultado.size());
         assertEquals(viajeCoincidente, resultado.get(0));
-        verify(viajeCoincidente).tieneComoPuertoDestino(puertoDestino);
-        verify(viajeNoCoincidente).tieneComoPuertoDestino(puertoDestino);
+        verify(viajeCoincidente).tienePuertoDestino(puertoDestino);
+        verify(viajeNoCoincidente).tienePuertoDestino(puertoDestino);
     }
 	
 	@Test
@@ -63,9 +63,9 @@ class FiltroPuertoDestinoTest {
         Viaje viaje3 = mock(Viaje.class);
         
         // Configuracion de comportamiento de los mocks 
-        when(viaje1.tieneComoPuertoDestino(puertoDestino)).thenReturn(true);
-        when(viaje2.tieneComoPuertoDestino(puertoDestino)).thenReturn(true);
-        when(viaje3.tieneComoPuertoDestino(puertoDestino)).thenReturn(false);
+        when(viaje1.tienePuertoDestino(puertoDestino)).thenReturn(true);
+        when(viaje2.tienePuertoDestino(puertoDestino)).thenReturn(true);
+        when(viaje3.tienePuertoDestino(puertoDestino)).thenReturn(false);
         
         
         List<Viaje> viajes = Arrays.asList(viaje1, viaje2, viaje3);
@@ -89,8 +89,8 @@ class FiltroPuertoDestinoTest {
         Viaje viaje2 = mock(Viaje.class);
         
         //Configuracion de comportamiento de los mocks
-        when(viaje1.tieneComoPuertoDestino(puertoDestino)).thenReturn(false);
-        when(viaje2.tieneComoPuertoDestino(puertoDestino)).thenReturn(false);
+        when(viaje1.tienePuertoDestino(puertoDestino)).thenReturn(false);
+        when(viaje2.tienePuertoDestino(puertoDestino)).thenReturn(false);
         
         //Construccion de lista de viajes y el filtro 
         List<Viaje> viajes = Arrays.asList(viaje1, viaje2);

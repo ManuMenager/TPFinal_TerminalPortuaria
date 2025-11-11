@@ -1,5 +1,8 @@
 package orden;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+>>>>>>> feature/Terminal1
 import java.util.ArrayList;
 import container.Container;
 import empresaTransportista.Camion;
@@ -71,6 +74,13 @@ public class Orden {
 		this.container = container;
 	}
 
-		
+	public String getNombreBuque() {
+	// TODO Auto-generated method stub
+		return null;
+	}
+	public LocalDateTime getHorarioTurno() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 
