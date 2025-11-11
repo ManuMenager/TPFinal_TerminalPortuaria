@@ -19,6 +19,8 @@ public class Buque implements Visitable {
 	private TerminalPortuaria terminalGestionada;
 	private Point posicion;
 	private int contenedoresOperados = 0;
+	private List<String> idContainersDescargados= new ArrayList<>();
+	
 
 	public Buque(String nombre, TerminalPortuaria terminalGestionada, GPS gps) {
 		this.nombre = nombre;
@@ -60,6 +62,7 @@ public class Buque implements Visitable {
 	
 	public void removerContainer(Container c) {
 		this.contenedoresOperados++;
+		this.idContainersDescargados.add(c.getId());
 		this.containers.remove(c);
 	}
 
@@ -115,5 +118,13 @@ public class Buque implements Visitable {
 
 	public int getContenedoresOperados() {
 		return this.contenedoresOperados;
+	}
+	
+	public List<String> getIdentificadoresCargados() {
+		return this.containers.stream().map(c -> c.getId()).toList();
+	}
+	
+	public List<String> getIdentificadoresDescargados() {
+		return this.idContainersDescargados;
 	}
 }

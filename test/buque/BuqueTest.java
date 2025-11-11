@@ -41,8 +41,6 @@ public class BuqueTest {
         when(gps.hayProblemasClimaticos()).thenReturn(false);
         
         buque.setViaje(viaje);
-        buque.agregarContainer(container);
-        buque.removerContainer(container);
     }
 
     @Test
@@ -151,6 +149,19 @@ public class BuqueTest {
     	assertEquals("El Perla", buque.getNombre());
     	assertEquals(List.of(container), buque.getContainers());
     	assertEquals(viaje, buque.getViaje());
-    	assertEquals(3, buque.getContenedoresOperados());
+    	assertEquals(1, buque.getContenedoresOperados());
+    }
+    
+    @Test
+    public void agregarYRemoverContainersTest() {
+    	when(container.getId()).thenReturn("ABC123");
+    	buque.agregarContainer(container);
+    	
+    	assertEquals(List.of(container.getId()), buque.getIdentificadoresCargados());
+    	assertEquals(List.of(), buque.getIdentificadoresDescargados());
+    	
+    	buque.removerContainer(container);
+    	assertEquals(List.of(), buque.getIdentificadoresCargados());
+    	assertEquals(List.of(container.getId()), buque.getIdentificadoresDescargados());
     }
 }
