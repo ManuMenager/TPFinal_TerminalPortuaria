@@ -5,5 +5,5 @@ import orden.Orden;
 
 public interface ReportVisitor {
 	public void visit(Buque buque);
-	public void visit(Orden orden);
+	
 }

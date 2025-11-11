@@ -9,7 +9,7 @@ import viaje.Viaje;
 import visitor.ReportVisitor;
 import visitor.Visitable;
 
-public class Orden implements Visitable{
+public class Orden {
 	private ArrayList <Servicio> servicios = new ArrayList<Servicio>();
 	private Container container;
 	private Camion camionAsignado;
@@ -70,11 +70,7 @@ public class Orden implements Visitable{
 	public void setContainer(Container container) {
 		this.container = container;
 	}
-	// Para el ReportVisitor
-		@Override
-		public void accept(ReportVisitor visitor) {
-			visitor.visit(this);
-		}
+
 		
 }
 

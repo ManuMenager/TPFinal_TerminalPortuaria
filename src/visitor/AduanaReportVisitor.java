@@ -1,7 +1,7 @@
 package visitor;
 
 import buque.Buque;
-import orden.Orden;
+import container.Container;
 
 public class AduanaReportVisitor implements ReportVisitor {
 	private StringBuilder html = new StringBuilder();
@@ -13,17 +13,19 @@ public class AduanaReportVisitor implements ReportVisitor {
             .append("<p>Arribo: ").append(buque.getViaje().fechaLlegadaTerminalGestionada()).append("</p>")
             .append("<p>Partida: ").append(buque.getViaje().fechaSalidaTerminalGestionada()).append("</p>")
             .append("<ul>");
-    }
+        for (Container c : buque.getContainers()) {
+            html.append("<li>")
+                .append(c.getTipo()).append(" - ").append(c.getId())
+                .append("</li>");
+        }
 
-    @Override
-    public void visit(Orden orden) {
-        html.append("<li>")
-            .append(orden.getContainer().getTipo()).append(" - ").append(orden.getContainer().getId())// REVISAR
-            .append("</li>");
+        html.append("</ul>");
     }
+    
 
-    public String generarHTML() {
+    public String generarHTML(){
         html.append("</ul>");
         return html.toString();
     }
 }
+ 

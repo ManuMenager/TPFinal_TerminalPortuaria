@@ -18,6 +18,6 @@ public class MuelleReportVisitor implements ReportVisitor {
         return sb.toString();
     }
 
-	public void visit(Orden orden) {}
 }
 
+ 

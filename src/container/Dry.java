@@ -6,5 +6,8 @@ public class Dry extends Container {
        
         super(id, ancho, largo, altura, peso, true);
     }
-  
+  @Override
+  public String getTipo() {
+		return "Dry";
+	}
 }

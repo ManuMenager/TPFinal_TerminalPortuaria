@@ -1,9 +1,29 @@
 package visitor;
 
 import buque.Buque;
-import orden.Orden;
 
 public class BuqueReportVisitor implements ReportVisitor {
-	public void visit(Buque buque) {}
-	public void visit(Orden orden) {}
+	  private StringBuilder xml = new StringBuilder();
+
+	    @Override
+	    public void visit(Buque buque) {
+	        xml.append("<report>\n");
+
+	        xml.append("  <import>\n");
+	        for (String id : buque.getIdentificadoresDescargados()) {
+	            xml.append("    <item>").append(id).append("</item>\n");
+	        }
+	        xml.append("  </import>\n");
+
+	        xml.append("  <export>\n");
+	        for (String id : buque.getIdentificadoresCargados()) {
+	            xml.append("    <item>").append(id).append("</item>\n");
+	        }
+	        xml.append("  </export>\n");
+
+	        xml.append("</report>");
+	    }
+	    public String generarXML() {
+	        return xml.toString();
+	    }
 }

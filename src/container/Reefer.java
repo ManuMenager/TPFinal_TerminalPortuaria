@@ -36,10 +36,13 @@ public class Reefer extends Container {
         }
         return horasConectado; 
     }
- 
+    
     public double calcularConsumoTotal() {
     	double horas = getHorasConectado();
     	return horas * consumoPorHora;
     }
+    public String getTipo() {
+		return "Reefer";
+	}
 }
 

@@ -1,11 +1,11 @@
 package container;
 
-public class Container {
+public abstract class Container {
 	private String id;// 4 letras y 7 numeros   
 	private int ancho;
 	private int largo;
 	private int altura;
-	private int peso; // preguntar ´peso total
+	private int peso; 
 	private boolean servicioEspecial;
 
 	public Container(String id, int ancho, int largo, int altura, int peso, boolean servicioEspecial) {
@@ -44,8 +44,7 @@ public class Container {
 		return this.ancho * this.largo * this.altura;
 	}
 
-	public Object getTipo() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	//solo para reporte
+		public abstract String getTipo();
+	
 }
