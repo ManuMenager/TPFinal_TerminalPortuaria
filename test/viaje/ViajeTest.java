@@ -120,4 +120,23 @@ public class ViajeTest {
 		
 		verify(spyCircuito).precioFinal();
 	}
+	
+	@Test
+	public void getCircuitoTest() {
+		Circuito circuitoDelViaje = viaje.getCircuito();
+		
+		assertEquals(spyCircuito, circuitoDelViaje);
+	}
+	
+	@Test
+	public void contieneTerminalTest() {
+		boolean resultadoPositivo = viaje.contieneTerminal(Brasil);
+		boolean resultadoNegativo = viaje.contieneTerminal(EstadosUnidos);
+		
+		assertTrue(resultadoPositivo);
+		assertFalse(resultadoNegativo);
+		
+		verify(spyCircuito).contieneTerminal(Brasil);
+		verify(spyCircuito).contieneTerminal(EstadosUnidos);
+	}
 }
