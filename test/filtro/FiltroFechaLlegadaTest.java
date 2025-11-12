@@ -2,7 +2,6 @@ package filtro;
 
 import static org.mockito.Mockito.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -103,4 +102,57 @@ class FiltroFechaLlegadaTest {
         // Verify
         assertTrue(resultado.isEmpty());
     }
+    
+    @Test
+    void testFiltrar_TodosLosViajesCoinciden() {
+        // Given
+    	// setUp - construccion de viajes con mock 
+        LocalDateTime fechaFiltro = LocalDateTime.of(2026, 1, 1, 3, 00);
+        Viaje viaje1 = mock(Viaje.class);
+        Viaje viaje2 = mock(Viaje.class);
+        List<Viaje> viajes = Arrays.asList(viaje1, viaje2);
+        FiltroFechaLlegada filtro = new FiltroFechaLlegada(fechaFiltro);
+        
+        when(viaje1.tieneProximaFechaDeLlegada(fechaFiltro)).thenReturn(true);
+        when(viaje2.tieneProximaFechaDeLlegada(fechaFiltro)).thenReturn(true);
+
+        // When
+        List<Viaje> resultado = filtro.filtrar(viajes);
+
+        // Then
+        assertEquals(2, resultado.size());
+        assertTrue(resultado.contains(viaje1));
+        assertTrue(resultado.contains(viaje2));
+    }
+    
+    // ===== TESTS DE MÉTODOS DE COMPOSITE (agregar y eliminar) =====
+
+    @Test
+    void testAgregarFiltro_NoHaceNada() {
+        // Given - El método agregar está vacío en la implementación
+    	LocalDateTime fechaFiltro = LocalDateTime.of(2026, 1, 1, 3, 00);
+        FiltroFechaSalida otroFiltro = mock(FiltroFechaSalida.class);
+        FiltroFechaLlegada filtro = new FiltroFechaLlegada(fechaFiltro);
+        
+        // When - No debería lanzar excepción
+        filtro.agregar(otroFiltro);
+        
+        // Then - El método se ejecuta sin problemas
+        assertTrue(true);
+    }
+
+    @Test
+    void testEliminarFiltro_NoHaceNada() {
+        // Given - El método eliminar está vacío en la implementación
+    	LocalDateTime fechaFiltro = LocalDateTime.of(2026, 1, 1, 3, 00);
+    	FiltroFechaSalida otroFiltro = mock(FiltroFechaSalida.class);
+        FiltroFechaLlegada filtro = new FiltroFechaLlegada(fechaFiltro);
+        
+        // When - No debería lanzar excepción
+        filtro.eliminar(otroFiltro);
+        
+        // Then - El método se ejecuta sin problemas
+        assertTrue(true);
+    }
+
 }

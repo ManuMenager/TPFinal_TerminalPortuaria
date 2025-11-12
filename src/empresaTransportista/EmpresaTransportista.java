@@ -11,6 +11,10 @@ public class EmpresaTransportista {
 		// TODO Auto-generated method stub
 		camiones.add(camion);
 	}
+	
+	public List<Camion> getCamiones() {
+		return this.camiones;
+	}
 
 	public boolean estaRegistradoElCamion(Camion camion1) {
 		// TODO Auto-generated method stub

@@ -1,13 +1,13 @@
 package orden;
 
 import java.time.LocalDate;
-
-import java.util.List;
-
-
+import java.util.ArrayList;
 import cliente.Shipper;
 import container.Container;
 import empresaTransportista.Camion;
+import empresaTransportista.Chofer;
+import servicio.Servicio;
+
 import viaje.Viaje;
 
 public class OrdenShipper extends Orden {
@@ -16,8 +16,9 @@ public class OrdenShipper extends Orden {
 
 	
 	
-	public OrdenShipper(Container container, Camion camionAsignado, Viaje viaje, Shipper shipper, LocalDate turno) {
-		super(container, camionAsignado, viaje);
+	public OrdenShipper(Container container, Camion camionAsignado, Viaje viaje, Shipper shipper,
+			LocalDate turno, ArrayList<Servicio> servicios) {
+		super(container, camionAsignado, viaje, servicios);
 		this.shipper = shipper;
 		this.turno = turno;
 	}
@@ -49,6 +50,20 @@ public class OrdenShipper extends Orden {
 	@Override
     public double montoTotal() {
 		return  this.montoTotalServicios();
+	}
+
+
+
+	public String getEmailCliente() {
+		// TODO Auto-generated method stub
+		return this.shipper.getEmail();
+	}
+
+
+
+	public Chofer choferAsignado() {
+		// TODO Auto-generated method stub
+		return this.getCamionAsignado().getChofer();
 	}
 	
 

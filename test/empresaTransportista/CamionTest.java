@@ -10,6 +10,14 @@ import org.junit.jupiter.api.Test;
 class CamionTest {
 	
 	Camion camion;
+	
+	@Test 
+	void verificarPatente() {
+		Chofer chofer = mock(Chofer.class);
+		camion = new Camion("jkl456", chofer);
+		
+		assertEquals("jkl456", camion.getPatente());
+	}
 
 	@Test
 	void verificarChoferTest() {
@@ -29,6 +37,28 @@ class CamionTest {
 		
 		verify(chofer, atLeastOnce()).getDni();
 		
+	}
+	
+	@Test
+	void verificarChoferIncorrecto(){
+		
+		Chofer chofer = mock(Chofer.class);
+		Chofer chofer1 = mock(Chofer.class);
+		
+		camion = new Camion("asd123",chofer);
+		//Configuro el comportamiento del mock
+		
+		when(chofer.getDni()).thenReturn(38689123);
+		when(chofer1.getDni()).thenReturn(45612300);
+		
+		boolean resultado = camion.estaRegistradoElChofer(chofer1);
+		//deberia ser true ya que esta registrado
+		
+		assertFalse(resultado);
+		
+		//Verificar que se llamo al metetodo getDni()
+		
+		verify(chofer, atLeastOnce()).getDni();
 	}
 	
 	@Test

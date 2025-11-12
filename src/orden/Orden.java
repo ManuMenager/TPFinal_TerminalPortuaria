@@ -2,6 +2,8 @@ package orden;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
+
 import container.Container;
 import empresaTransportista.Camion;
 import empresaTransportista.Chofer;
@@ -18,12 +20,12 @@ public abstract class Orden {
 	
 	
 	
-	public Orden(Container container, Camion camionAsignado, Viaje viaje) {
+	public Orden(Container container, Camion camionAsignado, Viaje viaje, ArrayList<Servicio> servicios) {
 		super();
 		this.container = container;
 		this.camionAsignado = camionAsignado;
 		this.viaje = viaje;
-		this.servicios = new ArrayList<>();
+		this.servicios = servicios;
 	}
 	
 	
@@ -89,5 +91,8 @@ public abstract class Orden {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
+	public abstract String getEmailCliente();
 }
 
