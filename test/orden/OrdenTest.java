@@ -54,7 +54,7 @@ class OrdenTest {
         Factura factura = orden.facturar();
 
         assertNotNull(factura);
-        assertEquals(3 + 1, factura.getConceptos().size()); 
+        assertEquals(5, factura.getConceptos().size()); 
         // 2 servicios + subtotal + viaje + total
 
         double esperado = 100 + 200 + 500; 
