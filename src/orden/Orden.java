@@ -1,5 +1,6 @@
 package orden;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import container.Container;
 import empresaTransportista.Camion;
@@ -7,8 +8,7 @@ import empresaTransportista.Chofer;
 import factura.Factura;
 import servicio.Servicio;
 import viaje.Viaje;
-import visitor.ReportVisitor;
-import visitor.Visitable;
+
 
 public abstract class Orden {
 	private ArrayList <Servicio> servicios = new ArrayList<Servicio>();
@@ -34,14 +34,10 @@ public abstract class Orden {
 	}
 	
 	
-	//DATOS DE LA CARGA
-	public Container getContainer() {
-		return container;  
-	}
 
-	/*public Chofer choferAsignado{
-		return this.getCamionAsignado().getConductor();//HACER
-	}*/
+	public Chofer choferAsignado(){
+		 return this.getCamionAsignado().getChofer();
+	}
 	
 	public void setCamionAsignado(Camion camionAsignado) {
 		this.camionAsignado = camionAsignado;
@@ -71,6 +67,9 @@ public abstract class Orden {
 		return camionAsignado;
 	}
 	
+	public Container getContainer() {
+		return container;  
+	}
 	//SETTERS
 	public void setServicios(ArrayList<Servicio> servicios) {
 		this.servicios = servicios;
@@ -82,7 +81,6 @@ public abstract class Orden {
 	public void setContainer(Container container) {
 		this.container = container;
 	}
-
 	public String getNombreBuque() {
 	// TODO Auto-generated method stub
 		return null;
