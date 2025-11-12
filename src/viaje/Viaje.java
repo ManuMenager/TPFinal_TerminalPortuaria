@@ -89,4 +89,9 @@ public class Viaje {
 	public double precioFinal() {
 		return this.circuito.precioFinal();
 	}
+
+	public Circuito getCircuito() {
+		// TODO Auto-generated method stub
+		return this.circuito;
+	}
 }

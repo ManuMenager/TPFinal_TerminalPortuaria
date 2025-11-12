@@ -67,11 +67,11 @@ public class Buque implements Visitable {
 	}
 
 	public void notificarArribo() {
-		this.terminalGestionada.notificarConsignees();
+		this.terminalGestionada.notificarConsignees(this);
 	}
 	
 	public void notificarSalida() {
-		this.terminalGestionada.notificarShippers();
+		this.terminalGestionada.notificarShippers(this);
 	}
 	
 	public boolean puedePagarServicios() {

@@ -18,7 +18,7 @@ public class FiltroPuertoDestino implements Filtro {
 	@Override
 	public List<Viaje> filtrar(List<Viaje> listaDeViajes) {
 		// TODO Auto-generated method stub
-		return listaDeViajes.stream().filter(v -> v.tieneComoPuertoDestino(puertoDestino)).collect(Collectors.toList());
+		return listaDeViajes.stream().filter(v -> v.tienePuertoDestino(puertoDestino)).collect(Collectors.toList());
 	}
 
 	@Override

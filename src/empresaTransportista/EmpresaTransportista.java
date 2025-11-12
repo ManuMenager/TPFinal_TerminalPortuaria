@@ -17,4 +17,9 @@ public class EmpresaTransportista {
 		return camiones.stream().anyMatch(camion -> camion.getPatente() == camion1.getPatente());
 	}
 
+	public boolean estaRegistradoElChofer(Chofer choferAsignado) {
+		// TODO Auto-generated method stub
+		return camiones.stream().anyMatch(c -> c.estaRegistradoElChofer(choferAsignado));
+	}
+
 }
