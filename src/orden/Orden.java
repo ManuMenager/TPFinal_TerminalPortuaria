@@ -1,8 +1,5 @@
 package orden;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
->>>>>>> feature/Terminal1
 import java.util.ArrayList;
 import container.Container;
 import empresaTransportista.Camion;
@@ -37,14 +34,10 @@ public abstract class Orden {
 	}
 	
 	
-	
-	
 	//DATOS DE LA CARGA
 	public Container getContainer() {
 		return container;  
 	}
-	// public void facturarServicios() preguntar si se hace
-	
 
 	/*public Chofer choferAsignado{
 		return this.getCamionAsignado().getConductor();//HACER
@@ -63,7 +56,7 @@ public abstract class Orden {
 	}
 	public abstract double montoTotal();
 	public void agregarServicio(Servicio servicio) {
-		servicios.add(servicio);
+		servicios.add(servicio);  
 	}
 
 	//GETTERS
