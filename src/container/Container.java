@@ -43,5 +43,10 @@ public  class Container {
 	{
 		return this.ancho * this.largo * this.altura;
 	}
+
+	public String getTipo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

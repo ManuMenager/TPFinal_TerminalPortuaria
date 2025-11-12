@@ -5,7 +5,6 @@ import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +24,7 @@ class FacturaTest {
     private Lavado servicioLavado;
     private Pesado servicioPesado;
     private Factura factura;
+    private ArrayList<Servicio> servicios;
 
     @BeforeEach
     public void setUp() {
@@ -32,8 +32,8 @@ class FacturaTest {
         orden = mock(Orden.class);
         viaje = mock(Viaje.class);
 
-        // Crear servicios reales (más simple que mockearlos)
-        servicioLavado = new Lavado("Lavado", LocalDate.of(2025, 11, 5), 1500,0 , 0);
+        // Crear servicios reales
+        servicioLavado = new Lavado("Lavado", LocalDate.of(2025, 11, 5), 1500, 0, 0);
         servicioPesado = new Pesado("Pesado", LocalDate.of(2025, 11, 5), 800);
 
         // Configurar comportamiento de viaje y orden
@@ -41,24 +41,27 @@ class FacturaTest {
         when(orden.montoTotalServicios()).thenReturn(2300.0);
         when(orden.getViaje()).thenReturn(viaje);
 
-        ArrayList<Servicio> servicios = new ArrayList<Servicio>();
+        // Crear lista de servicios
+        servicios = new ArrayList<>();
         servicios.add(servicioLavado);
         servicios.add(servicioPesado);
 
         when(orden.getServicios()).thenReturn(servicios);
+
+        // Mock de container
         Container container = mock(Container.class);
-        when(container.volumen()).thenReturn(50); // o el valor que necesite tu lógica
+        when(container.volumen()).thenReturn(50);
         when(orden.getContainer()).thenReturn(container);
 
-        // Crear factura
-        factura = new Factura(orden);
+        // Crear factura pasando servicios + orden
+        factura = new Factura(servicios, orden);
     }
 
     @Test
     public void testFacturaContieneTodosLosConceptos() {
         Set<ConceptoServicio> conceptos = factura.getConceptos();
 
-        // 2 servicios + subtotal + viaje + total
+        // 2 servicios + subtotal + viaje + total = 5 conceptos
         assertEquals(5, conceptos.size(),
                 "La factura debería tener 5 conceptos (2 servicios + subtotal + viaje + total)");
     }
@@ -82,9 +85,9 @@ class FacturaTest {
     public void testFacturaSinViajeSoloServicios() {
         when(orden.getViaje()).thenReturn(null);
 
-        Factura facturaSoloServicios = new Factura(orden);
+        Factura facturaSoloServicios = new Factura(servicios, orden);
 
-        // 2 servicios + subtotal + total
+        // 2 servicios + subtotal + total = 4 conceptos
         assertEquals(4, facturaSoloServicios.getConceptos().size(),
                 "Factura sin viaje debería tener 4 conceptos");
     }
