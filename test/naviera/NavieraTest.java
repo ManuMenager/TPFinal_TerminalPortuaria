@@ -21,6 +21,7 @@ import buque.GPS;
 import circuito.Circuito;
 import circuito.Tramo;
 import terminalPortuaria.TerminalPortuaria;
+import viaje.Viaje;
 
 class NavieraTest {
 	Naviera naviera;
@@ -128,27 +129,18 @@ class NavieraTest {
 	
 	@Test
 	public void escalasDesdeHastaTest() {
-		// --- ARRANGE ---
-		// 1. Stubbear el guardián (recorreDesdeHasta)
-		// Usamos doReturn() porque son spies
 		doReturn(true).when(circuito1).recorreDesdeHasta(Argentina, España);
 		doReturn(true).when(circuito2).recorreDesdeHasta(Argentina, España);
 		doReturn(true).when(circuito3).recorreDesdeHasta(Argentina, España);
 
-		// 2. Stubbear los valores que se van a recolectar
-		// ¡USAMOS doReturn() EN LUGAR DE when()!
 		doReturn(1).when(circuito1).escalasDesdeHasta(Argentina, España);
 		doReturn(2).when(circuito2).escalasDesdeHasta(Argentina, España);
 		doReturn(1).when(circuito3).escalasDesdeHasta(Argentina, España);
 
-		// --- ACT ---
 		List<Integer> escalas = naviera.escalasDesdeHasta(Argentina, España);
 		
-		// --- ASSERT ---
 		assertEquals(List.of(1, 2, 1), escalas);
 		
-		// --- VERIFY ---
-		// Ahora el verify SÍ funciona, porque solo hay 1 invocación
 		verify(circuito1).escalasDesdeHasta(Argentina, España);
 		verify(circuito2).escalasDesdeHasta(Argentina, España);
 		verify(circuito3).escalasDesdeHasta(Argentina, España);
@@ -190,16 +182,10 @@ class NavieraTest {
 	
 	@Test
 	public void precioDesdeHastaLanzaExcepcionTest() {
-		// --- ARRANGE ---
-		// Configuramos el guardián 'recorreDesdeHasta' para que falle,
-		// haciendo que todos los circuitos devuelvan 'false'.
-		// Usamos doReturn() porque son spies.
 		doReturn(false).when(circuito1).recorreDesdeHasta(España, EstadosUnidos);
 		doReturn(false).when(circuito2).recorreDesdeHasta(España, EstadosUnidos);
 		doReturn(false).when(circuito3).recorreDesdeHasta(España, EstadosUnidos);
 		
-		// --- ACT & ASSERT ---
-		// Verificamos que se lanza la excepción esperada
 		assertThrows(IllegalArgumentException.class, () -> {
 			naviera.preciosDesdeHasta(España, EstadosUnidos);
 		});
@@ -216,22 +202,17 @@ class NavieraTest {
 
 	@Test
 	public void circuitoMenorPrecioDesdeHastaTest() {
-		// ARRANGE: Usamos doReturn() para los spies
 	    doReturn(true).when(circuito1).recorreDesdeHasta(Brasil, Argentina);
 	    doReturn(true).when(circuito2).recorreDesdeHasta(Brasil, Argentina);
-	    doReturn(false).when(circuito3).recorreDesdeHasta(Brasil, Argentina); // c3 no hace la ruta
+	    doReturn(false).when(circuito3).recorreDesdeHasta(Brasil, Argentina);
 	    
 	    doReturn(2500.0).when(circuito1).precioDesdeHasta(Brasil, Argentina);
 	    doReturn(500.0).when(circuito2).precioDesdeHasta(Brasil, Argentina);
-	    // No es necesario stubbear el precio de c3 (nunca se llamará)
 
-	    // ACT
 	    Circuito masBarato = naviera.circuitoMenorPrecioDesdeHasta(Brasil, Argentina);
 
-	    // ASSERT
 	    assertEquals(circuito2, masBarato);
 	    
-	    // VERIFY
 	    verify(circuito1).recorreDesdeHasta(Brasil, Argentina);
 	    verify(circuito2).recorreDesdeHasta(Brasil, Argentina);
 	    verify(circuito3).recorreDesdeHasta(Brasil, Argentina);
@@ -243,22 +224,18 @@ class NavieraTest {
 	
 	@Test
 	public void circuitoMenorTiempoDesdeHastaTest() {
-	    // ARRANGE: Usamos doReturn() para los spies
 	    doReturn(true).when(circuito1).recorreDesdeHasta(Brasil, Argentina);
 	    doReturn(true).when(circuito2).recorreDesdeHasta(Brasil, Argentina);
 	    doReturn(true).when(circuito3).recorreDesdeHasta(Brasil, Argentina);
 	    
 	    doReturn(25).when(circuito1).tiempoDesdeHasta(Brasil, Argentina);
-	    doReturn(5).when(circuito2).tiempoDesdeHasta(Brasil, Argentina); // El más rápido
+	    doReturn(5).when(circuito2).tiempoDesdeHasta(Brasil, Argentina);
 	    doReturn(30).when(circuito3).tiempoDesdeHasta(Brasil, Argentina);
 
-	    // ACT
 	    Circuito masRapido = naviera.circuitoMenorTiempoDesdeHasta(Brasil, Argentina);
 	    
-	    // ASSERT
 	    assertEquals(circuito2, masRapido);
 	    
-	    // VERIFY: Usamos atLeastOnce() para que sea robusto
 	    verify(circuito1, atLeastOnce()).tiempoDesdeHasta(Brasil, Argentina);
 	    verify(circuito2, atLeastOnce()).tiempoDesdeHasta(Brasil, Argentina);
 	    verify(circuito3, atLeastOnce()).tiempoDesdeHasta(Brasil, Argentina);
@@ -266,23 +243,45 @@ class NavieraTest {
 
 	@Test
 	public void circuitoMenorEscalasDesdeHastaTest() {
-		// ARRANGE: Usamos doReturn() para los spies
 		doReturn(true).when(circuito1).recorreDesdeHasta(Brasil, Argentina);
 	    doReturn(true).when(circuito2).recorreDesdeHasta(Brasil, Argentina);
-	    doReturn(false).when(circuito3).recorreDesdeHasta(Brasil, Argentina); // c3 no hace la ruta
+	    doReturn(false).when(circuito3).recorreDesdeHasta(Brasil, Argentina);
 	    
 	    doReturn(1).when(circuito1).escalasDesdeHasta(Brasil, Argentina);
-	    doReturn(0).when(circuito2).escalasDesdeHasta(Brasil, Argentina); // Menos escalas
+	    doReturn(0).when(circuito2).escalasDesdeHasta(Brasil, Argentina);
 
-	    // ACT
 		Circuito menosEscalas = naviera.circuitoMenorEscalasDesdeHasta(Brasil, Argentina);
 		
-		// ASSERT
 		assertEquals(circuito2, menosEscalas);
 		
-		// VERIFY
 		verify(circuito1).escalasDesdeHasta(Brasil, Argentina);
 		verify(circuito2).escalasDesdeHasta(Brasil, Argentina);
-		verify(circuito3, never()).escalasDesdeHasta(Brasil, Argentina); // c3 fue filtrado
+		verify(circuito3, never()).escalasDesdeHasta(Brasil, Argentina);
 	}
+	
+	@Test
+    public void getViajesDeTerminalFiltraCorrectamenteTest() {
+        when(circuito1.contieneTerminal(España)).thenReturn(true);
+        when(circuito2.contieneTerminal(España)).thenReturn(false);
+        when(circuito3.contieneTerminal(España)).thenReturn(true);
+
+        List<Viaje> viajesConEspaña = naviera.getViajesDeTerminal(España);
+        
+        assertEquals(2, viajesConEspaña.size());
+    }
+
+    @Test
+    public void tiempoDesdeHastaDevuelveTodosLosTiemposTest() {
+        doReturn(15).when(circuito1).tiempoDesdeHasta(Argentina, España);
+        doReturn(20).when(circuito2).tiempoDesdeHasta(Argentina, España);
+        doReturn(16).when(circuito3).tiempoDesdeHasta(Argentina, España);
+
+        List<Integer> tiempos = naviera.tiempoDesdeHasta(Argentina, España);
+        
+        assertEquals(List.of(15, 20, 16), tiempos);
+        
+        verify(circuito1).tiempoDesdeHasta(Argentina, España);
+        verify(circuito2).tiempoDesdeHasta(Argentina, España);
+        verify(circuito3).tiempoDesdeHasta(Argentina, España);
+    }
 }

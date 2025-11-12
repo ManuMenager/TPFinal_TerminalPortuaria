@@ -91,7 +91,10 @@ public class Viaje {
 	}
 
 	public Circuito getCircuito() {
-		// TODO Auto-generated method stub
 		return this.circuito;
+	}
+	
+	public boolean contieneTerminal(TerminalPortuaria terminal) {
+		return this.circuito.contieneTerminal(terminal); 
 	}
 }
