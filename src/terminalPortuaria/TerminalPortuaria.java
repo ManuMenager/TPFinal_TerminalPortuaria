@@ -4,6 +4,7 @@ import java.awt.Point;
 
 import buque.Buque;
 import java.lang.reflect.AccessFlag.Location;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,6 +20,7 @@ import container.Container;
 import criterio.Criterio;
 import empresaTransportista.Camion;
 import empresaTransportista.EmpresaTransportista;
+import factura.Factura;
 import filtro.Filtro;
 import naviera.Naviera;
 import orden.Orden;
@@ -144,38 +146,64 @@ public class TerminalPortuaria {
 	}
 	
 	public void crearOrdenShipper(Shipper shipper, Camion camion, Viaje viaje,
-			Container container, List<Servicio> servicios) {
+			Container container, ArrayList<Servicio> servicios, LocalDate turno) {
 		
-		OrdenShipper orden = new OrdenShipper(shipper,camion,viaje,container,servicios);
+		OrdenShipper orden = new OrdenShipper(container,camion,viaje,shipper,turno,servicios);
 		this.registrarOrdenShipper(orden);
 	}
 	
 	public void crearOrdenConsignee(Consignee consignee, Camion camion, Viaje viaje,
-			Container container, List<Servicio> servicios) {
+			Container container, ArrayList<Servicio> servicios) {
 		
 		OrdenConsignee orden = new OrdenConsignee(consignee,camion,viaje,container,servicios);
 		this.registrarOrdenConsignee(orden);
 	}
 
 	public void notificarConsignees(Buque b) {
-		List<OrdenConsignee> ordenesFiltradas = this.getOrdenesConsignee()
-                .stream()
-                .filter(orden -> orden.getNombreBuque().equals(b.getNombre()))
-                .collect(Collectors.toList());
+		List<OrdenConsignee> ordenesFiltradas = this.ordenesConsigneeFiltradasPorBuque(b);
 		for (OrdenConsignee orden : ordenesFiltradas) {
 			String emailConsignee = orden.getEmailCliente();
 			this.correo.enviarCorreo(emailConsignee, "Buque ingresando a terminal");
 		}
 	}
-
-	public void notificarShippers(Buque b) {
-		List<OrdenShipper> ordenesFiltradas = this.getOrdenesShipper()
+	
+	public List<OrdenConsignee> ordenesConsigneeFiltradasPorBuque(Buque b){
+		return this.getOrdenesConsignee()
                 .stream()
                 .filter(orden -> orden.getNombreBuque().equals(b.getNombre()))
                 .collect(Collectors.toList());
+	}
+
+	public void notificarShippers(Buque b) {
+		List<OrdenShipper> ordenesFiltradas = this.ordenesShipperFiltradasPorBuque(b);
 		for (OrdenShipper orden : ordenesFiltradas) {
 			String emailShipper = orden.getEmailCliente();
 			this.correo.enviarCorreo(emailShipper, "Buque saliendo de la terminal");
+		}
+	}
+	
+	public List<OrdenShipper> ordenesShipperFiltradasPorBuque(Buque b){
+		return this.getOrdenesShipper()
+                .stream()
+                .filter(orden -> orden.getNombreBuque().equals(b.getNombre()))
+                .collect(Collectors.toList());
+	}
+	
+	
+	
+	public void enviarFacturas(Buque b) {
+		List<OrdenConsignee> ordenesConsignee = this.ordenesConsigneeFiltradasPorBuque(b);
+		List<OrdenShipper> ordenesShipper = this.ordenesShipperFiltradasPorBuque(b);
+		
+		List<Orden> ordenes = new ArrayList<>();
+		
+		ordenes.addAll(ordenesConsignee);
+		ordenes.addAll(ordenesShipper);
+				
+		for (Orden orden : ordenes) {
+			String emailCliente = orden.getEmailCliente();
+			Factura facturaCliente = orden.facturar();
+			this.correo.enviarCorreoConFactura(emailCliente, "Facturacion por servicios", facturaCliente);
 		}
 	}
 	
@@ -195,7 +223,7 @@ public class TerminalPortuaria {
 		return this.circuitos;
 	}
 	
-	public int tiempoHasta(Naviera n, TerminalPortuaria destino) {
+	public List<Integer> tiempoHasta(Naviera n, TerminalPortuaria destino) {
 		return n.tiempoDesdeHasta(this, destino);
 	}
 	

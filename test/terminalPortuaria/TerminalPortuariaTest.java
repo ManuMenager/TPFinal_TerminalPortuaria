@@ -3,6 +3,7 @@ package terminalPortuaria;
 import static org.mockito.Mockito.*;
 
 import java.awt.Point;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +31,7 @@ import criterio.Criterio;
 import empresaTransportista.Camion;
 import empresaTransportista.Chofer;
 import empresaTransportista.EmpresaTransportista;
+import factura.Factura;
 import filtro.Filtro;
 import naviera.Naviera;
 import orden.OrdenConsignee;
@@ -40,59 +42,6 @@ import viaje.Viaje;
 class TerminalPortuariaTest {
 
 	TerminalPortuaria terminal;
-	@Mock
-	private Point ubicacion;
-	@Mock
-	private Criterio criterio;
-	@Mock
-	private EmpresaTransportista empresaTransportista1;
-	@Mock
-	private EmpresaTransportista empresaTransportista2;
-	@Mock
-	private OrdenShipper ordenShipper1;
-	@Mock
-	private OrdenShipper ordenShipper2;
-	@Mock
-    private OrdenConsignee ordenConsignee1;
-    @Mock
-    private OrdenConsignee ordenConsignee2;
-    @Mock
-    private Naviera naviera1;
-    @Mock
-    private Naviera naviera2;
-    @Mock
-    private Shipper shipper1;
-    @Mock
-    private Shipper shipper2;
-    @Mock
-    private Consignee consignee1;
-    @Mock
-    private Consignee consignee2;
-    @Mock
-    private TerminalPortuaria destino;
-    @Mock
-    private Circuito circuito;
-    @Mock
-    private Filtro filtro;
-    @Mock
-    private Viaje viaje1;
-    @Mock
-    private Viaje viaje2;
-    @Mock
-    private Viaje viaje3;
-    @Mock
-    private CorreoEmail correo;
-    @Mock
-    private Camion camion;
-    @Mock 
-    private Container container;
-    @Mock
-    private Servicio servicio1;
-    @Mock
-    private Servicio servicio2;
-    @Mock
-    private Chofer chofer;
-    
 	
 	@BeforeEach
 	public void setUp() {
@@ -105,6 +54,8 @@ class TerminalPortuariaTest {
     @Test
     public void testRegistrarEmpresaTransportista() {
         // When
+    	EmpresaTransportista empresaTransportista1 = mock(EmpresaTransportista.class);
+		EmpresaTransportista empresaTransportista2 = mock(EmpresaTransportista.class);
         terminal.registrarEmpresa(empresaTransportista1);
         terminal.registrarEmpresa(empresaTransportista2);
 
@@ -119,6 +70,8 @@ class TerminalPortuariaTest {
     @Test
     public void testRegistrarOrdenShipper() {
         // When
+    	OrdenShipper ordenShipper1 = mock(OrdenShipper.class);
+		OrdenShipper ordenShipper2 = mock(OrdenShipper.class);
         terminal.registrarOrdenShipper(ordenShipper1);
         terminal.registrarOrdenShipper(ordenShipper2);
 
@@ -133,6 +86,8 @@ class TerminalPortuariaTest {
     @Test
     public void testRegistrarOrdenConsignee() {
         // When
+    	OrdenConsignee ordenConsignee1 = mock(OrdenConsignee.class);
+		OrdenConsignee ordenConsignee2 = mock(OrdenConsignee.class);
         terminal.registrarOrdenConsignee(ordenConsignee1);
         terminal.registrarOrdenConsignee(ordenConsignee2);
 
@@ -147,6 +102,8 @@ class TerminalPortuariaTest {
     @Test
     public void testRegistrarNaviera() {
         // When
+    	Naviera naviera1 = mock(Naviera.class);
+	    Naviera naviera2 = mock(Naviera.class);
         terminal.registrarNaviera(naviera1);
         terminal.registrarNaviera(naviera2);
 
@@ -161,6 +118,8 @@ class TerminalPortuariaTest {
     @Test
     public void testRegistrarShipper() {
         // When
+    	Shipper shipper1 = mock(Shipper.class);
+	    Shipper shipper2 = mock(Shipper.class);
         terminal.registrarShipper(shipper1);
         terminal.registrarShipper(shipper2);
 
@@ -175,6 +134,8 @@ class TerminalPortuariaTest {
     @Test
     public void testRegistrarConsignee() {
         // When
+    	Consignee consignee1 = mock(Consignee.class);
+	    Consignee consignee2 = mock(Consignee.class);
         terminal.registrarConsignee(consignee1);
         terminal.registrarConsignee(consignee2);
 
@@ -189,6 +150,9 @@ class TerminalPortuariaTest {
     @Test
     public void testMejorCircuito() {
         // Given
+    	TerminalPortuaria destino = mock(TerminalPortuaria.class);
+    	Naviera naviera1 = mock(Naviera.class);
+	    Naviera naviera2 = mock(Naviera.class);
     	Circuito circuito1 = mock(Circuito.class);
     	Criterio criterio = mock(Criterio.class);
         terminal.setCriterio(criterio);
@@ -243,6 +207,8 @@ class TerminalPortuariaTest {
     @Test
     public void testBuscarRutasConFiltroQueRetornaTodos() {
         // Given
+    	Viaje viaje1 = mock(Viaje.class);
+	    Viaje viaje2 = mock(Viaje.class);
     	Naviera naviera1 = mock(Naviera.class);
     	Filtro filtro = mock(Filtro.class);
         terminal.registrarNaviera(naviera1);
@@ -391,10 +357,11 @@ class TerminalPortuariaTest {
     	Viaje viaje1 = mock(Viaje.class);
     	Container container = mock(Container.class);
     	Shipper shipper1 = mock(Shipper.class);
-        List<Servicio> servicios = Arrays.asList(servicio1, servicio2);
+    	LocalDate turno = mock(LocalDate.class);
+        ArrayList<Servicio> servicios = new ArrayList<>(Arrays.asList(servicio1, servicio2));
         
         // When
-        terminal.crearOrdenShipper(shipper1, camion, viaje1, container, servicios);
+        terminal.crearOrdenShipper(shipper1,camion,viaje1,container,servicios,turno);
 
         // Then
         List<OrdenShipper> ordenes = terminal.getOrdenesShipper();
@@ -410,7 +377,7 @@ class TerminalPortuariaTest {
     	Viaje viaje1 = mock(Viaje.class);
     	Container container = mock(Container.class);
     	Consignee consignee1 = mock(Consignee.class);
-        List<Servicio> servicios = Arrays.asList(servicio1, servicio2);
+        ArrayList<Servicio> servicios = new ArrayList<>(Arrays.asList(servicio1, servicio2));
         
         // When
         terminal.crearOrdenConsignee(consignee1, camion, viaje1, container, servicios);
@@ -471,7 +438,40 @@ class TerminalPortuariaTest {
         verify(correo, never()).enviarCorreo(eq("shipper2@test.com"), anyString());
     }
     
- // ===== TESTS DE REGISTRO DE CIRCUITOS =====
+    // ===== TESTS ENVIO DE FACTURAS =====
+    
+
+    @Test
+    public void testEnviarFacturas() {
+        // Given
+    	OrdenShipper ordenShipper = mock(OrdenShipper.class);
+    	OrdenConsignee ordenConsignee = mock(OrdenConsignee.class);
+    	Buque buque = mock(Buque.class);
+    	Factura factura = mock(Factura.class);
+    	CorreoEmail correo = mock(CorreoEmail.class);
+        terminal.setCorreo(correo);
+        terminal.registrarOrdenShipper(ordenShipper);
+        terminal.registrarOrdenConsignee(ordenConsignee);
+        
+        when(buque.getNombre()).thenReturn("Buque Test");
+        when(ordenShipper.getNombreBuque()).thenReturn("Buque Test");
+        when(ordenConsignee.getNombreBuque()).thenReturn("Buque Test");
+        when(ordenShipper.getEmailCliente()).thenReturn("shipper@test.com");
+        when(ordenConsignee.getEmailCliente()).thenReturn("consignee@test.com");
+        when(ordenShipper.facturar()).thenReturn(factura);
+        when(ordenConsignee.facturar()).thenReturn(factura);
+
+        // When
+        terminal.enviarFacturas(buque);
+
+        // Then
+        verify(correo, times(2)).enviarCorreoConFactura(anyString(), eq("Facturacion por servicios"), any(Factura.class));
+        verify(correo).enviarCorreoConFactura("shipper@test.com", "Facturacion por servicios", factura);
+        verify(correo).enviarCorreoConFactura("consignee@test.com", "Facturacion por servicios", factura);
+    }
+    
+    
+    // ===== TESTS DE REGISTRO DE CIRCUITOS =====
 
     @Test
     public void testRegistrarCircuitos() {
@@ -511,14 +511,16 @@ class TerminalPortuariaTest {
         // Given
     	Naviera naviera1 = mock(Naviera.class);
     	TerminalPortuaria destino = mock(TerminalPortuaria.class);
-        int tiempoEsperado = 5;
-        when(naviera1.tiempoDesdeHasta(terminal, destino)).thenReturn(tiempoEsperado);
+        int tiempo1 = 5;
+        int tiempo2 = 6;
+        List<Integer> tiemposEsperados = Arrays.asList(tiempo1, tiempo2);
+        when(naviera1.tiempoDesdeHasta(terminal, destino)).thenReturn(tiemposEsperados);
 
         // When
-        int resultado = terminal.tiempoHasta(naviera1, destino);
+        List<Integer> resultado = terminal.tiempoHasta(naviera1, destino);
 
         // Then
-        assertEquals(tiempoEsperado, resultado);
+        assertEquals(tiemposEsperados, resultado);
         verify(naviera1).tiempoDesdeHasta(terminal, destino);
     }
     

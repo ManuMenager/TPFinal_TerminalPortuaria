@@ -102,4 +102,56 @@ class FiltroPuertoDestinoTest {
         // Verify
         assertTrue(resultado.isEmpty());
     }
+	
+	@Test
+    void testFiltrar_TodosLosViajesCoinciden() {
+        // Given
+    	// setUp - construccion de viajes con mock 
+		TerminalPortuaria puertoDestino = mock(TerminalPortuaria.class);
+        Viaje viaje1 = mock(Viaje.class);
+        Viaje viaje2 = mock(Viaje.class);
+        List<Viaje> viajes = Arrays.asList(viaje1, viaje2);
+        FiltroPuertoDestino filtro = new FiltroPuertoDestino(puertoDestino);
+        
+        when(viaje1.tienePuertoDestino(puertoDestino)).thenReturn(true);
+        when(viaje2.tienePuertoDestino(puertoDestino)).thenReturn(true);
+
+        // When
+        List<Viaje> resultado = filtro.filtrar(viajes);
+
+        // Then
+        assertEquals(2, resultado.size());
+        assertTrue(resultado.contains(viaje1));
+        assertTrue(resultado.contains(viaje2));
+    }
+    
+    // ===== TESTS DE MÉTODOS DE COMPOSITE (agregar y eliminar) =====
+
+    @Test
+    void testAgregarFiltro_NoHaceNada() {
+        // Given - El método agregar está vacío en la implementación
+    	TerminalPortuaria puertoDestino = mock(TerminalPortuaria.class);
+        FiltroFechaLlegada otroFiltro = mock(FiltroFechaLlegada.class);
+        FiltroPuertoDestino filtro = new FiltroPuertoDestino(puertoDestino);
+        
+        // When - No debería lanzar excepción
+        filtro.agregar(otroFiltro);
+        
+        // Then - El método se ejecuta sin problemas
+        assertTrue(true);
+    }
+
+    @Test
+    void testEliminarFiltro_NoHaceNada() {
+        // Given - El método eliminar está vacío en la implementación
+    	TerminalPortuaria puertoDestino = mock(TerminalPortuaria.class);
+        FiltroFechaLlegada otroFiltro = mock(FiltroFechaLlegada.class);
+        FiltroPuertoDestino filtro = new FiltroPuertoDestino(puertoDestino);
+        
+        // When - No debería lanzar excepción
+        filtro.eliminar(otroFiltro);
+        
+        // Then - El método se ejecuta sin problemas
+        assertTrue(true);
+    }
 }

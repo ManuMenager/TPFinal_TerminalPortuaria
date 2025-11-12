@@ -1,8 +1,9 @@
 package terminalPortuaria;
 
-public class CorreoEmail {
+import factura.Factura;
 
-	public void enviarCorreo(String mail, String mensaje) {
-		
-	}
+public interface CorreoEmail {
+
+	public void enviarCorreo(String mail, String mensaje);
+	public void enviarCorreoConFactura(String mail,String mensaje,Factura factura);
 }
