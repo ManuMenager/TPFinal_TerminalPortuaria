@@ -2,6 +2,7 @@ package factura;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -14,7 +15,7 @@ public class Factura {
     private Orden orden;
     private Set<ConceptoServicio> conceptos;
 
-    public Factura(Orden orden) {
+    public Factura(ArrayList <Servicio> servicios,Orden orden) {
         this.orden = orden;
         this.conceptos = new LinkedHashSet<>();
 
@@ -30,7 +31,7 @@ public class Factura {
 
         // Subtotal de servicios
         this.conceptos.add(new ConceptoServicio(
-            "Subtotal servicios",
+            "Subtotal servicios", 
             LocalDate.now(),
             orden.montoTotalServicios()
         ));

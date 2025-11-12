@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import container.Container;
 import empresaTransportista.Camion;
 import empresaTransportista.Chofer;
+import factura.Factura;
 import servicio.Servicio;
 import viaje.Viaje;
 import visitor.ReportVisitor;
 import visitor.Visitable;
 
-public class Orden {
+public abstract class Orden {
 	private ArrayList <Servicio> servicios = new ArrayList<Servicio>();
 	private Container container;
 	private Camion camionAsignado;
@@ -24,9 +25,20 @@ public class Orden {
 		this.viaje = viaje;
 		this.servicios = new ArrayList<>();
 	}
+	
+	
+	public Factura facturar() {
+	    Factura factura = new Factura(this.servicios, this);
+	    System.out.println(factura.desgloseDeServicios());
+	    return factura;
+	}
+	
+	
+	
+	
 	//DATOS DE LA CARGA
 	public Container getContainer() {
-		return container;
+		return container;  
 	}
 	// public void facturarServicios() preguntar si se hace
 	
@@ -42,7 +54,11 @@ public class Orden {
 	
 			return this.servicios.stream().mapToDouble( s -> s.costoServicio(this)  ).sum();
 	}
-	
+	public double montoTotalViaje() {
+		
+		return this.viaje.precioFinal();
+	}
+	public abstract double montoTotal();
 	public void agregarServicio(Servicio servicio) {
 		servicios.add(servicio);
 	}

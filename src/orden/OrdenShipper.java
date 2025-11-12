@@ -43,6 +43,10 @@ public class OrdenShipper extends Orden {
 		this.turno = turno;
 	}
 
-
+	@Override
+    public double montoTotal() {
+		return  this.montoTotalServicios();
+	}
+	
 
 }

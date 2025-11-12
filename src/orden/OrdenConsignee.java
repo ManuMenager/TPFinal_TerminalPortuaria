@@ -20,6 +20,10 @@ public class OrdenConsignee extends Orden {
 	public void setConsignee(Consignee consignee) {
 		this.consignee = consignee;
 	}
+	@Override
+    public double montoTotal() {
+		return  this.montoTotalServicios() + this.montoTotalViaje();
+	}
 	
 	
 }
