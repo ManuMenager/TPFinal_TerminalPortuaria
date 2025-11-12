@@ -1,6 +1,6 @@
 package container;
 
-public abstract class Container {
+public  class Container {
 	private String id;// 4 letras y 7 numeros   
 	private int ancho;
 	private int largo;
@@ -43,8 +43,5 @@ public abstract class Container {
 	{
 		return this.ancho * this.largo * this.altura;
 	}
-
-	//solo para reporte
-		public abstract String getTipo();
 	
 }
