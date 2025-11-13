@@ -73,7 +73,7 @@ public class BuqueTest {
         buque.evaluarPosicion();
         buque.evaluarPosicion();
         
-        verify(terminalGestionada).notificarConsignees();
+        verify(terminalGestionada).notificarConsignees(buque);
         assertFalse(buque.puedeRegistrar());
         assertFalse(buque.puedePagarServicios());
     }
@@ -85,7 +85,7 @@ public class BuqueTest {
     	buque.evaluarPosicion();
     	buque.evaluarPosicion();
         
-        verify(terminalGestionada, times(0)).notificarConsignees();  
+        verify(terminalGestionada, times(0)).notificarConsignees(buque);  
         assertTrue(buque.puedeRegistrar());
         assertFalse(buque.puedePagarServicios());
     }
@@ -135,7 +135,7 @@ public class BuqueTest {
         
         buque.evaluarPosicion();
 
-        verify(terminalGestionada).notificarShippers();
+        verify(terminalGestionada).notificarShippers(buque);
         assertTrue(buque.puedeRegistrar());
         assertFalse(buque.puedePagarServicios());
     }
