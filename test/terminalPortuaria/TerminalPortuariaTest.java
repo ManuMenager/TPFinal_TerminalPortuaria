@@ -3,7 +3,6 @@ package terminalPortuaria;
 import static org.mockito.Mockito.*;
 
 import java.awt.Point;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,12 +14,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-
 import buque.Buque;
 import buque.GPS;
 import circuito.Circuito;
@@ -289,7 +284,7 @@ class TerminalPortuariaTest {
     	EmpresaTransportista empresaTransportista1 = mock(EmpresaTransportista.class);
     	terminal.registrarEmpresa(empresaTransportista1);
         
-        when(ordenShipper1.getHorarioTurno()).thenReturn(LocalDateTime.now().plusHours(2));
+        when(ordenShipper1.getTurno()).thenReturn(LocalDateTime.now().plusHours(2));
         when(ordenShipper1.getCamionAsignado()).thenReturn(camion);
         when(ordenShipper1.choferAsignado()).thenReturn(chofer);
         when(empresaTransportista1.estaRegistradoElCamion(camion)).thenReturn(true);
@@ -311,7 +306,7 @@ class TerminalPortuariaTest {
     	EmpresaTransportista empresaTransportista1 = mock(EmpresaTransportista.class);
         terminal.registrarEmpresa(empresaTransportista1);
         
-        when(ordenShipper1.getHorarioTurno()).thenReturn(LocalDateTime.now().plusHours(4)); // Más de 3 horas
+        when(ordenShipper1.getTurno()).thenReturn(LocalDateTime.now().plusHours(4)); // Más de 3 horas
         when(ordenShipper1.getCamionAsignado()).thenReturn(camion);
         when(ordenShipper1.choferAsignado()).thenReturn(chofer);
         when(empresaTransportista1.estaRegistradoElCamion(camion)).thenReturn(true);
@@ -333,7 +328,7 @@ class TerminalPortuariaTest {
     	EmpresaTransportista empresaTransportista1 = mock(EmpresaTransportista.class);
         terminal.registrarEmpresa(empresaTransportista1);
         
-        when(ordenShipper1.getHorarioTurno()).thenReturn(LocalDateTime.now().plusHours(2));
+        when(ordenShipper1.getTurno()).thenReturn(LocalDateTime.now().plusHours(2));
         when(ordenShipper1.getCamionAsignado()).thenReturn(camion);
         when(ordenShipper1.choferAsignado()).thenReturn(chofer);
         when(empresaTransportista1.estaRegistradoElCamion(camion)).thenReturn(false); // Camion no registrado
@@ -357,7 +352,7 @@ class TerminalPortuariaTest {
     	Viaje viaje1 = mock(Viaje.class);
     	Container container = mock(Container.class);
     	Shipper shipper1 = mock(Shipper.class);
-    	LocalDate turno = mock(LocalDate.class);
+    	LocalDateTime turno = mock(LocalDateTime.class);
         ArrayList<Servicio> servicios = new ArrayList<>(Arrays.asList(servicio1, servicio2));
         
         // When

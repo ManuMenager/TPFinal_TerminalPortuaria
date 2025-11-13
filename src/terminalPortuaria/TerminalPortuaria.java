@@ -139,14 +139,14 @@ public class TerminalPortuaria {
 		return empresasTransportistas.stream().anyMatch(e -> e.estaRegistradoElCamion(orden.getCamionAsignado()));
 	}
 
-	private boolean verificarHorario(Orden orden) {
+	private boolean verificarHorario(OrdenShipper orden) {
 		// TODO Auto-generated method stub
 		LocalDateTime horaActual = LocalDateTime.now();
-		return orden.getHorarioTurno().isBefore(horaActual.plusHours(3)); //Devuelve true cuando no se paso de las 3 horas
+		return orden.getTurno().isBefore(horaActual.plusHours(3)); //Devuelve true cuando no se paso de las 3 horas
 	}
 	
 	public void crearOrdenShipper(Shipper shipper, Camion camion, Viaje viaje,
-			Container container, ArrayList<Servicio> servicios, LocalDate turno) {
+			Container container, ArrayList<Servicio> servicios, LocalDateTime turno) {
 		
 		OrdenShipper orden = new OrdenShipper(container,camion,viaje,shipper,turno,servicios);
 		this.registrarOrdenShipper(orden);

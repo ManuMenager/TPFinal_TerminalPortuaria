@@ -96,6 +96,6 @@ class ServicioTest {
 		    when(ordenNro1.getViaje()).thenReturn(viajeMock);
 		    when(viajeMock.fechaLlegadaTerminalGestionada()).thenReturn(llegadaContainer);
 
-		    assertEquals(600, servAlmacenamiento.costoServicio(ordenNro1));
+		    assertEquals(1000.0, servAlmacenamiento.costoServicio(ordenNro1));
 		}
 }

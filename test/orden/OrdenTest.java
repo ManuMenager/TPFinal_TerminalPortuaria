@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -85,7 +86,7 @@ class OrdenTest {
             camionMock,
             viajeMock,
             shipperMock,
-            LocalDate.now(),
+            LocalDateTime.now(),
             listaServicios
         );
 
@@ -112,7 +113,7 @@ class OrdenTest {
             camionMock,
             viajeMock,
             shipperMock,
-            LocalDate.now(),
+            LocalDateTime.now(),
             listaServicios
         );
 
@@ -136,7 +137,7 @@ class OrdenTest {
             camionMock,
             viajeMock,
             shipperMock,
-            LocalDate.now(),
+            LocalDateTime.now(),
             listaServicios
         );
 

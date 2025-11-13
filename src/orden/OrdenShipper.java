@@ -1,6 +1,6 @@
 package orden;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import cliente.Shipper;
 import container.Container;
@@ -12,12 +12,12 @@ import viaje.Viaje;
 
 public class OrdenShipper extends Orden {
 	private Shipper shipper;
-	private LocalDate turno;
+	private LocalDateTime turno;
 
 	
 	
 	public OrdenShipper(Container container, Camion camionAsignado, Viaje viaje, Shipper shipper,
-			LocalDate turno, ArrayList<Servicio> servicios) {
+			LocalDateTime turno, ArrayList<Servicio> servicios) {
 		super(container, camionAsignado, viaje, servicios);
 		this.shipper = shipper;
 		this.turno = turno;
@@ -37,13 +37,13 @@ public class OrdenShipper extends Orden {
 
 
 
-	public LocalDate getTurno() {
+	public LocalDateTime getTurno() {
 		return turno;
 	}
 
 
 
-	public void setTurno(LocalDate turno) {
+	public void setTurno(LocalDateTime turno) {
 		this.turno = turno;
 	}
 
