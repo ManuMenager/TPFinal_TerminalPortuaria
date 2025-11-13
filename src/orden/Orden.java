@@ -93,6 +93,6 @@ public abstract class Orden {
 	}
 
 
-	public abstract String getEmailCliente();
+	public abstract String getEmailCliente(); 
 }
 
