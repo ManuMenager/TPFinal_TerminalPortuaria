@@ -2,26 +2,27 @@ package orden;
 
 import java.util.ArrayList;
 
-import cliente.Consignee;
+import cliente.Cliente;
 import container.Container;
 import empresaTransportista.Camion;
 import servicio.Servicio;
 import viaje.Viaje;
 
 public class OrdenConsignee extends Orden {
-	private Consignee consignee;
+	private Cliente consignee;
 
-	public OrdenConsignee(Consignee consignee, Camion camionAsignado, Viaje viaje, Container container,
+	public OrdenConsignee(Cliente consignee, Camion camionAsignado, Viaje viaje, Container container,
 			ArrayList<Servicio> servicios) {
 		super(container, camionAsignado, viaje, servicios);
 		this.consignee = consignee;
 	}
 
-	public Consignee getConsignee() {
+	@Override
+	public Cliente getCliente() {
 		return consignee;
 	}
 
-	public void setConsignee(Consignee consignee) {
+	public void setConsignee(Cliente consignee) {
 		this.consignee = consignee;
 	}
 	@Override

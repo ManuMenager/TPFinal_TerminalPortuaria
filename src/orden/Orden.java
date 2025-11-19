@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import cliente.Cliente;
 import container.Container;
 import empresaTransportista.Camion;
 import empresaTransportista.Chofer;
@@ -93,6 +94,7 @@ public abstract class Orden {
 	}
 
 
-	public abstract String getEmailCliente(); 
+	public abstract String getEmailCliente();
+	public abstract Cliente getCliente();
 }
 

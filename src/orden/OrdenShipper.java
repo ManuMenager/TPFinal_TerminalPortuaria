@@ -2,7 +2,8 @@ package orden;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import cliente.Shipper;
+
+import cliente.Cliente;
 import container.Container;
 import empresaTransportista.Camion;
 import empresaTransportista.Chofer;
@@ -11,12 +12,12 @@ import servicio.Servicio;
 import viaje.Viaje;
 
 public class OrdenShipper extends Orden {
-	private Shipper shipper;
+	private Cliente shipper;
 	private LocalDateTime turno;
 
 	
 	
-	public OrdenShipper(Container container, Camion camionAsignado, Viaje viaje, Shipper shipper,
+	public OrdenShipper(Container container, Camion camionAsignado, Viaje viaje, Cliente shipper,
 			LocalDateTime turno, ArrayList<Servicio> servicios) {
 		super(container, camionAsignado, viaje, servicios);
 		this.shipper = shipper;
@@ -24,14 +25,7 @@ public class OrdenShipper extends Orden {
 	}
 
 
-
-	public Shipper getShipper() {
-		return shipper;
-	}
-
-
-
-	public void setShipper(Shipper shipper) {
+	public void setShipper(Cliente shipper) {
 		this.shipper = shipper;
 	}
 
@@ -64,6 +58,13 @@ public class OrdenShipper extends Orden {
 	public Chofer choferAsignado() {
 		// TODO Auto-generated method stub
 		return this.getCamionAsignado().getChofer();
+	}
+
+
+
+	@Override
+	public Cliente getCliente() {
+		return shipper;
 	}
 	
 

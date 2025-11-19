@@ -19,8 +19,7 @@ import org.junit.jupiter.api.Test;
 import buque.Buque;
 import buque.GPS;
 import circuito.Circuito;
-import cliente.Consignee;
-import cliente.Shipper;
+import cliente.Cliente;
 import container.Container;
 import criterio.Criterio;
 import empresaTransportista.Camion;
@@ -113,33 +112,33 @@ class TerminalPortuariaTest {
     @Test
     public void testRegistrarShipper() {
         // When
-    	Shipper shipper1 = mock(Shipper.class);
-	    Shipper shipper2 = mock(Shipper.class);
-        terminal.registrarShipper(shipper1);
-        terminal.registrarShipper(shipper2);
+    	Cliente shipper1 = mock(Cliente.class);
+	    Cliente shipper2 = mock(Cliente.class);
+        terminal.registrarCliente(shipper1);
+        terminal.registrarCliente(shipper2);
 
         //La terminal inicializa sin shippers registrados
         // Then
-        List<Shipper> shippers = terminal.getShippers();
-        assertEquals(2, shippers.size());
-        assertTrue(shippers.contains(shipper1));
-        assertTrue(shippers.contains(shipper2));
+        List<Cliente> clientes = terminal.getClientes();
+        assertEquals(2, clientes.size());
+        assertTrue(clientes.contains(shipper1));
+        assertTrue(clientes.contains(shipper2));
     }
     
     @Test
     public void testRegistrarConsignee() {
         // When
-    	Consignee consignee1 = mock(Consignee.class);
-	    Consignee consignee2 = mock(Consignee.class);
-        terminal.registrarConsignee(consignee1);
-        terminal.registrarConsignee(consignee2);
+    	Cliente consignee1 = mock(Cliente.class);
+	    Cliente consignee2 = mock(Cliente.class);
+        terminal.registrarCliente(consignee1);
+        terminal.registrarCliente(consignee2);
 
         //La terminal inicializa sin consignees registrados
         // Then
-        List<Consignee> consignees = terminal.getConsignees();
-        assertEquals(2, consignees.size());
-        assertTrue(consignees.contains(consignee1));
-        assertTrue(consignees.contains(consignee2));
+        List<Cliente> clientes = terminal.getClientes();
+        assertEquals(2, clientes.size());
+        assertTrue(clientes.contains(consignee1));
+        assertTrue(clientes.contains(consignee2));
     }
     
     @Test
@@ -273,10 +272,10 @@ class TerminalPortuariaTest {
         assertTrue("La lista debería estar vacía", resultado.isEmpty());
     }
     
-    // ===== TESTS DE VERIFICACIÓN DE TURNO =====
+    // ===== TESTS DE ENTREGA DE CARGA POR CAMIONES =====
 
     @Test
-    public void testVerificarTurnoAprobado() {
+    public void testEntregaDeCamionAprobado() {
         // Given
     	Camion camion = mock(Camion.class);
     	Chofer chofer = mock(Chofer.class);
@@ -291,14 +290,14 @@ class TerminalPortuariaTest {
         when(empresaTransportista1.estaRegistradoElChofer(chofer)).thenReturn(true);
 
         // When
-        String resultado = terminal.verificarTurno(ordenShipper1);
+        String resultado = terminal.verificarEntradaDeCamion(ordenShipper1);
 
         // Then
         assertEquals("Aprobado", resultado);
     }
     
     @Test
-    public void testVerificarTurnoRechazadoPorHorario() {
+    public void testEntregaDeCamionRechazadoPorHorario() {
         // Given
     	Camion camion = mock(Camion.class);
     	Chofer chofer = mock(Chofer.class);
@@ -313,14 +312,14 @@ class TerminalPortuariaTest {
         when(empresaTransportista1.estaRegistradoElChofer(chofer)).thenReturn(true);
 
         // When
-        String resultado = terminal.verificarTurno(ordenShipper1);
+        String resultado = terminal.verificarEntradaDeCamion(ordenShipper1);
 
         // Then
         assertEquals("Rechazado", resultado);
     }
     
     @Test
-    public void testVerificarTurnoRechazadoPorCamion() {
+    public void testEntregaDeCamionRechazadoPorCamion() {
         // Given
     	Camion camion = mock(Camion.class);
     	Chofer chofer = mock(Chofer.class);
@@ -335,28 +334,98 @@ class TerminalPortuariaTest {
         when(empresaTransportista1.estaRegistradoElChofer(chofer)).thenReturn(true);
 
         // When
-        String resultado = terminal.verificarTurno(ordenShipper1);
+        String resultado = terminal.verificarEntradaDeCamion(ordenShipper1);
 
         // Then
         assertEquals("Rechazado", resultado);
     }
     
-    // ===== TESTS DE CREACIÓN DE ÓRDENES =====
+    // ===== TESTS DE VERIFICACIONES =====
+    
+    @Test
+    void testEstaRegistrado_ClienteRegistrado() {
+        // Given
+    	Cliente shipperA = mock(Cliente.class);
+        terminal.registrarCliente(shipperA); // 
+        
+        // When
+        boolean resultado = terminal.estaRegistrado(shipperA);
+
+        // Then
+        assertTrue(resultado);
+    }
+    
+    @Test
+    void testEstaRegistrado_ClienteNoRegistrado() {
+        // Given 
+    	Cliente shipperA = mock(Cliente.class);
+        
+        // When
+        boolean resultado = terminal.estaRegistrado(shipperA);
+
+        // Then
+        assertFalse(resultado);
+    }
 
     @Test
-    public void testCrearOrdenShipper() {
+    void testEstaRegistradoCamion_CamionRegistrado() {
+        // Given
+    	EmpresaTransportista empT = mock(EmpresaTransportista.class);
+    	Camion camion = mock(Camion.class);
+        terminal.registrarEmpresa(empT);
+        when(empT.estaRegistradoElCamion(camion)).thenReturn(true);
+
+        // When
+        boolean resultado = terminal.estaRegistradoCamion(camion);
+
+        // Then
+        assertTrue(resultado);
+        verify(empT).estaRegistradoElCamion(camion);
+    }
+    
+    @Test
+    void testExisteViaje_ViajeExiste() {
+        // Given
+    	Naviera naviera = mock(Naviera.class);
+    	Viaje viaje1 = mock(Viaje.class);
+    	Viaje viaje2 = mock(Viaje.class);
+        terminal.registrarNaviera(naviera);
+        when(naviera.getViajesDeTerminal(terminal)).thenReturn(Arrays.asList(viaje1, viaje2));
+        
+
+        // When
+        boolean resultado = terminal.existeViaje(viaje1);
+
+        // Then
+        assertTrue(resultado);
+    }
+    
+    // ===== TESTS DE EXPORTACION E IMPORTACION =====
+
+    @Test
+    public void testExportacion() {
         // Given
     	Servicio servicio1 = mock(Servicio.class);
     	Servicio servicio2 = mock(Servicio.class);
     	Camion camion = mock(Camion.class);
     	Viaje viaje1 = mock(Viaje.class);
     	Container container = mock(Container.class);
-    	Shipper shipper1 = mock(Shipper.class);
+    	Cliente shipper1 = mock(Cliente.class);
     	LocalDateTime turno = mock(LocalDateTime.class);
         ArrayList<Servicio> servicios = new ArrayList<>(Arrays.asList(servicio1, servicio2));
+        EmpresaTransportista empT = mock(EmpresaTransportista.class);
+        Naviera naviera = mock(Naviera.class);
+        List<Viaje> viajes = new ArrayList<>();
         
         // When
-        terminal.crearOrdenShipper(shipper1,camion,viaje1,container,servicios,turno);
+        viajes.add(viaje1);
+        terminal.registrarNaviera(naviera);
+        terminal.registrarCliente(shipper1);
+        empT.registrarCamion(camion);
+        terminal.registrarEmpresa(empT);
+        when(empT.estaRegistradoElCamion(camion)).thenReturn(true);
+        when(naviera.getViajesDeTerminal(terminal)).thenReturn(viajes);
+        terminal.exportacion(shipper1,camion,viaje1,container,servicios,turno);
 
         // Then
         List<OrdenShipper> ordenes = terminal.getOrdenesShipper();
@@ -364,18 +433,28 @@ class TerminalPortuariaTest {
     }
     
     @Test
-    public void testCrearOrdenConsignee() {
+    public void testImportacion() {
         // Given
     	Servicio servicio1 = mock(Servicio.class);
     	Servicio servicio2 = mock(Servicio.class);
     	Camion camion = mock(Camion.class);
     	Viaje viaje1 = mock(Viaje.class);
     	Container container = mock(Container.class);
-    	Consignee consignee1 = mock(Consignee.class);
+    	Cliente consignee1 = mock(Cliente.class);
         ArrayList<Servicio> servicios = new ArrayList<>(Arrays.asList(servicio1, servicio2));
+        EmpresaTransportista empT = mock(EmpresaTransportista.class);
+        Naviera naviera = mock(Naviera.class);
+        List<Viaje> viajes = new ArrayList<>();
         
         // When
-        terminal.crearOrdenConsignee(consignee1, camion, viaje1, container, servicios);
+        viajes.add(viaje1);
+        terminal.registrarNaviera(naviera);
+        terminal.registrarCliente(consignee1);
+        empT.registrarCamion(camion);
+        terminal.registrarEmpresa(empT);
+        when(empT.estaRegistradoElCamion(camion)).thenReturn(true);
+        when(naviera.getViajesDeTerminal(terminal)).thenReturn(viajes);
+        terminal.importacion(consignee1, camion, viaje1, container, servicios);
 
         // Then
         List<OrdenConsignee> ordenes = terminal.getOrdenesConsignee();
@@ -388,22 +467,21 @@ class TerminalPortuariaTest {
     public void testNotificarConsignees() {
         // Given
     	OrdenConsignee ordenConsignee1 = mock(OrdenConsignee.class);
-    	CorreoEmail correo = mock(CorreoEmail.class);
+    	Cliente consignee = mock(Cliente.class);
     	terminal.registrarOrdenConsignee(ordenConsignee1);
+    	String email = "Asunto: Buque ingresando a terminal";
         
         // Crear Buque 
         Buque buque = new Buque("Buque Test", terminal, (GPS) mock(GPS.class));
         
         when(ordenConsignee1.getNombreBuque()).thenReturn("Buque Test");
-        when(ordenConsignee1.getEmailCliente()).thenReturn("consignee1@test.com");
+        when(ordenConsignee1.getCliente()).thenReturn(consignee);
         
-        terminal.setCorreo(correo);
-
         // When
         terminal.notificarConsignees(buque);
 
         // Then
-        verify(correo).enviarCorreo("consignee1@test.com", "Buque ingresando a terminal");
+        verify(consignee).recibirNotificacion(email);
     }
 
 
@@ -412,25 +490,25 @@ class TerminalPortuariaTest {
         // Given
     	OrdenShipper ordenShipper1 = mock(OrdenShipper.class);
     	OrdenShipper ordenShipper2 = mock(OrdenShipper.class);
-    	CorreoEmail correo = mock(CorreoEmail.class);
+    	Cliente shipper1 = mock(Cliente.class);
+    	Cliente shipper2 = mock(Cliente.class);
         terminal.registrarOrdenShipper(ordenShipper1);
         terminal.registrarOrdenShipper(ordenShipper2);
+        String email = "Asunto: Buque saliendo de la terminal";
         
         // Crear Buque 
         Buque buque = new Buque("Buque Test", terminal, (GPS) mock(GPS.class));
         
         when(ordenShipper1.getNombreBuque()).thenReturn("Buque Test");
         when(ordenShipper2.getNombreBuque()).thenReturn("Otro Buque"); // No debe notificar
-        when(ordenShipper1.getEmailCliente()).thenReturn("shipper1@test.com");
-        
-        terminal.setCorreo(correo);
+        when(ordenShipper1.getCliente()).thenReturn(shipper1);
 
         // When
         terminal.notificarShippers(buque);
 
         // Then
-        verify(correo).enviarCorreo("shipper1@test.com", "Buque saliendo de la terminal");
-        verify(correo, never()).enviarCorreo(eq("shipper2@test.com"), anyString());
+        verify(shipper1).recibirNotificacion(email);
+        verify(shipper2, never()).recibirNotificacion(email);
     }
     
     // ===== TESTS ENVIO DE FACTURAS =====
@@ -443,16 +521,16 @@ class TerminalPortuariaTest {
     	OrdenConsignee ordenConsignee = mock(OrdenConsignee.class);
     	Buque buque = mock(Buque.class);
     	Factura factura = mock(Factura.class);
-    	CorreoEmail correo = mock(CorreoEmail.class);
-        terminal.setCorreo(correo);
         terminal.registrarOrdenShipper(ordenShipper);
         terminal.registrarOrdenConsignee(ordenConsignee);
+        Cliente shipper1 = mock(Cliente.class);
+    	Cliente consignee1 = mock(Cliente.class);
         
         when(buque.getNombre()).thenReturn("Buque Test");
         when(ordenShipper.getNombreBuque()).thenReturn("Buque Test");
         when(ordenConsignee.getNombreBuque()).thenReturn("Buque Test");
-        when(ordenShipper.getEmailCliente()).thenReturn("shipper@test.com");
-        when(ordenConsignee.getEmailCliente()).thenReturn("consignee@test.com");
+        when(ordenShipper.getCliente()).thenReturn(shipper1);
+        when(ordenConsignee.getCliente()).thenReturn(consignee1);
         when(ordenShipper.facturar()).thenReturn(factura);
         when(ordenConsignee.facturar()).thenReturn(factura);
 
@@ -460,9 +538,8 @@ class TerminalPortuariaTest {
         terminal.enviarFacturas(buque);
 
         // Then
-        verify(correo, times(2)).enviarCorreoConFactura(anyString(), eq("Facturacion por servicios"), any(Factura.class));
-        verify(correo).enviarCorreoConFactura("shipper@test.com", "Facturacion por servicios", factura);
-        verify(correo).enviarCorreoConFactura("consignee@test.com", "Facturacion por servicios", factura);
+        verify(shipper1).recibirFactura(factura);
+        verify(consignee1).recibirFactura(factura);
     }
     
     

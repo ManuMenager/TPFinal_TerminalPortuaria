@@ -14,8 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import circuito.Circuito;
-import cliente.Consignee;
-import cliente.Shipper;
+import cliente.Cliente;
 import container.Container;
 import criterio.Criterio;
 import empresaTransportista.Camion;
@@ -37,10 +36,8 @@ public class TerminalPortuaria {
 	private List<EmpresaTransportista> empresasTransportistas = new ArrayList<EmpresaTransportista>();
 	private List<OrdenConsignee> ordenesImportacion = new ArrayList<OrdenConsignee>();
 	private List<OrdenShipper> ordenesExportacion = new ArrayList<OrdenShipper>();
-	private List<Consignee> importadores = new ArrayList<Consignee>();
-	private List<Shipper> exportadores = new ArrayList<Shipper>();
+	private List<Cliente> clientes = new ArrayList<Cliente>();
 	private List<Naviera> navieras = new ArrayList<Naviera>();
-	private CorreoEmail correo;
 	private Set<Circuito> circuitos = new HashSet<Circuito>();
 	
 	public TerminalPortuaria(String nombre, Point ubicacion) {
@@ -48,9 +45,6 @@ public class TerminalPortuaria {
 		this.ubicacion = ubicacion;
 	}
 	
-	public void setCorreo(CorreoEmail correo) {
-		this.correo = correo;
-	}
 	
 	public void setCriterio(Criterio criterio) {
 		this.criterio = criterio;
@@ -88,20 +82,12 @@ public class TerminalPortuaria {
 		return this.navieras;
 	}
 	
-	public void registrarShipper(Shipper shipper) {
-		this.exportadores.add(shipper);
+	public void registrarCliente(Cliente shipper) {
+		this.clientes.add(shipper);
 	}
 	
-	public List<Shipper> getShippers(){
-		return this.exportadores;
-	}
-	
-	public void registrarConsignee(Consignee consignee) {
-		this.importadores.add(consignee);
-	}
-	
-	public List<Consignee> getConsignees(){
-		return this.importadores;
+	public List<Cliente> getClientes(){
+		return this.clientes;
 	}
 	
 	//Dependendiendo del criterio retorna el mejor circuito para llegar a ese destino.
@@ -114,13 +100,13 @@ public class TerminalPortuaria {
 		return filtro.filtrar(viajes);
 	}
 
-	private List<Viaje> getViajes() {
+	List<Viaje> getViajes() {
 		return this.navieras.stream()
 				.flatMap(n->n.getViajesDeTerminal(this).stream())
 				.collect(Collectors.toList());
 	}
 	
-	public String verificarTurno(OrdenShipper orden) { //Entrega Terrestre de Carga
+	public String verificarEntradaDeCamion(OrdenShipper orden) { //Entrega Terrestre de Carga
 		if(this.verificarHorario(orden) && this.verificarCamion(orden) && this.verificarChofer(orden)) {
 			return "Aprobado";
 		}
@@ -130,40 +116,61 @@ public class TerminalPortuaria {
 	}
 	
 	private boolean verificarChofer(OrdenShipper orden) {
-		// TODO Auto-generated method stub
 		return empresasTransportistas.stream().anyMatch(e -> e.estaRegistradoElChofer(orden.choferAsignado()));
 	}
 
 	private boolean verificarCamion(Orden orden) {
-		// TODO Auto-generated method stub
-		return empresasTransportistas.stream().anyMatch(e -> e.estaRegistradoElCamion(orden.getCamionAsignado()));
+		return this.estaRegistradoCamion(orden.getCamionAsignado());
 	}
 
 	private boolean verificarHorario(OrdenShipper orden) {
-		// TODO Auto-generated method stub
 		LocalDateTime horaActual = LocalDateTime.now();
 		return orden.getTurno().isBefore(horaActual.plusHours(3)); //Devuelve true cuando no se paso de las 3 horas
 	}
 	
-	public void crearOrdenShipper(Shipper shipper, Camion camion, Viaje viaje,
+	public void exportacion(Cliente shipper, Camion camion, Viaje viaje,
 			Container container, ArrayList<Servicio> servicios, LocalDateTime turno) {
 		
-		OrdenShipper orden = new OrdenShipper(container,camion,viaje,shipper,turno,servicios);
-		this.registrarOrdenShipper(orden);
+		if(this.verificarRegistros(shipper,camion,viaje)) {
+			OrdenShipper orden = new OrdenShipper(container,camion,viaje,shipper,turno,servicios);
+			this.registrarOrdenShipper(orden);
+		}
 	}
 	
-	public void crearOrdenConsignee(Consignee consignee, Camion camion, Viaje viaje,
+	public void importacion(Cliente consignee, Camion camion, Viaje viaje,
 			Container container, ArrayList<Servicio> servicios) {
 		
-		OrdenConsignee orden = new OrdenConsignee(consignee,camion,viaje,container,servicios);
-		this.registrarOrdenConsignee(orden);
+		if(this.verificarRegistros(consignee,camion,viaje)) {
+			OrdenConsignee orden = new OrdenConsignee(consignee,camion,viaje,container,servicios);
+			this.registrarOrdenConsignee(orden);
+		}
+	}
+
+	private boolean verificarRegistros(Cliente cliente, Camion camion, Viaje viaje) {
+		return this.estaRegistrado(cliente) 
+			&& this.estaRegistradoCamion(camion)
+			&& this.existeViaje(viaje);
+	}
+
+
+	public boolean existeViaje(Viaje viaje) {
+		return this.getViajes().stream().anyMatch(v -> v.equals(viaje));
+	}
+
+	public boolean estaRegistradoCamion(Camion camion) {
+		return empresasTransportistas.stream().anyMatch(e -> e.estaRegistradoElCamion(camion));
+	}
+
+	public boolean estaRegistrado(Cliente cliente) {
+		return this.getClientes().contains(cliente);
 	}
 
 	public void notificarConsignees(Buque b) {
+		String email = "Asunto: Buque ingresando a terminal";
 		List<OrdenConsignee> ordenesFiltradas = this.ordenesConsigneeFiltradasPorBuque(b);
 		for (OrdenConsignee orden : ordenesFiltradas) {
-			String emailConsignee = orden.getEmailCliente();
-			this.correo.enviarCorreo(emailConsignee, "Buque ingresando a terminal");
+			Cliente consignee = orden.getCliente();
+			consignee.recibirNotificacion(email);
 		}
 	}
 	
@@ -175,10 +182,11 @@ public class TerminalPortuaria {
 	}
 
 	public void notificarShippers(Buque b) {
+		String email = "Asunto: Buque saliendo de la terminal";
 		List<OrdenShipper> ordenesFiltradas = this.ordenesShipperFiltradasPorBuque(b);
 		for (OrdenShipper orden : ordenesFiltradas) {
-			String emailShipper = orden.getEmailCliente();
-			this.correo.enviarCorreo(emailShipper, "Buque saliendo de la terminal");
+			Cliente shipper = orden.getCliente();
+			shipper.recibirNotificacion(email);
 		}
 	}
 	
@@ -201,9 +209,9 @@ public class TerminalPortuaria {
 		ordenes.addAll(ordenesShipper);
 				
 		for (Orden orden : ordenes) {
-			String emailCliente = orden.getEmailCliente();
+			Cliente cliente = orden.getCliente();
 			Factura facturaCliente = orden.facturar();
-			this.correo.enviarCorreoConFactura(emailCliente, "Facturacion por servicios", facturaCliente);
+			cliente.recibirFactura(facturaCliente);
 		}
 	}
 	

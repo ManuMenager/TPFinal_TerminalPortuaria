@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import cliente.Consignee;
-import cliente.Shipper;
+import cliente.Cliente;
 import container.Container;
 import empresaTransportista.Camion;
 import empresaTransportista.Chofer;
@@ -51,7 +50,7 @@ class OrdenTest {
 
     @Test
     void testFacturar_OrdenConsignee() {
-        Consignee consigneeMock = mock(Consignee.class);
+        Cliente consigneeMock = mock(Cliente.class);
         when(consigneeMock.getEmail()).thenReturn("cliente@importador.com");
 
         OrdenConsignee orden = new OrdenConsignee(
@@ -78,7 +77,7 @@ class OrdenTest {
 
     @Test
     void testFacturar_OrdenShipper() {
-        Shipper shipperMock = mock(Shipper.class);
+        Cliente shipperMock = mock(Cliente.class);
         when(shipperMock.getEmail()).thenReturn("cliente@exportador.com");
 
         OrdenShipper orden = new OrdenShipper(
@@ -107,7 +106,7 @@ class OrdenTest {
         Chofer choferMock = mock(Chofer.class);
         when(camionMock.getChofer()).thenReturn(choferMock);
 
-        Shipper shipperMock = mock(Shipper.class);
+        Cliente shipperMock = mock(Cliente.class);
         OrdenShipper orden = new OrdenShipper(
             containerMock,
             camionMock,
@@ -122,7 +121,7 @@ class OrdenTest {
 
     @Test
     void testMontoTotalServiciosYViaje() {
-        Consignee consigneeMock = mock(Consignee.class);
+        Cliente consigneeMock = mock(Cliente.class);
         OrdenConsignee ordenCons = new OrdenConsignee(
             consigneeMock,
             camionMock,
@@ -131,7 +130,7 @@ class OrdenTest {
             listaServicios
         );
 
-        Shipper shipperMock = mock(Shipper.class);
+        Cliente shipperMock = mock(Cliente.class);
         OrdenShipper ordenShip = new OrdenShipper(
             containerMock,
             camionMock,
