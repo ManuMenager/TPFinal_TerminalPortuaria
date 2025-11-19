@@ -33,6 +33,4 @@ public class OrdenConsignee extends Orden {
 	public String getEmailCliente() {
 		return this.consignee.getEmail();
 	}
-	
-
 }

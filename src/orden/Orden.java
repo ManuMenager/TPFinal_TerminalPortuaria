@@ -35,8 +35,6 @@ public abstract class Orden {
 	    System.out.println(factura.desgloseDeServicios());
 	    return factura;
 	}
-	
-	
 
 	public Chofer choferAsignado(){
 		 return this.getCamionAsignado().getChofer();
@@ -73,6 +71,7 @@ public abstract class Orden {
 	public Container getContainer() {
 		return container;  
 	}
+	
 	//SETTERS
 	public void setServicios(ArrayList<Servicio> servicios) {
 		this.servicios = servicios;
@@ -84,15 +83,15 @@ public abstract class Orden {
 	public void setContainer(Container container) {
 		this.container = container;
 	}
+	
 	public String getNombreBuque() {
-	// TODO Auto-generated method stub
 		return null;
 	}
+	
 	public LocalDateTime getHorarioTurno() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 	public abstract String getEmailCliente();
 	public abstract Cliente getCliente();
